@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Producto — Paula's Desserts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:   rgb(244,237,226);
+      --cream2:  rgb(245,240,235);
+      --navy:    rgb(13,54,134);
+      --navy-dk: rgb(6,44,112);
+      --white:   #ffffff;
+      --font-head:  'DM Serif Display', serif;
+      --font-body:  Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--cream);
+      font-family: var(--font-body);
+      color: var(--navy);
+    }
+
+    /* ── HEADER / FOOTER IMAGES ── */
+    .site-header img,
+    .site-footer img {
+      width: 100%;
+      display: block;
+    }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 48px 0;
+      font-size: 12px;
+      opacity: 0.55;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .breadcrumb span { opacity: 0.45; }
+
+    /* ── PRODUCT HERO ── */
+    .product-hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 48px 56px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: start;
+    }
+
+    /* Image side */
+    .product-images {}
+
+    .product-main-img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background-color: var(--cream2);
+      border: 1.5px dashed rgba(13,54,134,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: monospace;
+      font-size: 12px;
+      color: rgba(13,54,134,0.4);
+      letter-spacing: 0.03em;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .btn-personalizar {
+      display: block;
+      width: 100%;
+      margin-top: 14px;
+      padding: 16px;
+      background: #E6AF7B;
+      color: var(--navy);
+      text-align: center;
+      font-family: var(--font-body);
+      font-size: 15px;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+
+    .btn-personalizar:hover { opacity: 0.85; }
+
+    .product-thumbnails {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .thumb {
+      flex: 1;
+      aspect-ratio: 1;
+      background-color: var(--cream2);
+      border: 1.5px dashed rgba(13,54,134,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: monospace;
+      font-size: 10px;
+      color: rgba(13,54,134,0.35);
+    }
+
+    /* Info side */
+    .product-info {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .product-category {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    .product-name {
+      font-family: var(--font-head);
+      font-size: 38px;
+      line-height: 1.1;
+      color: var(--navy);
+    }
+
+    .product-tagline {
+      font-size: 15px;
+      line-height: 1.6;
+      opacity: 0.65;
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(13,54,134,0.15);
+    }
+
+    /* Customization */
+    .custom-section {}
+
+    .custom-title {
+      font-family: var(--font-head);
+      font-size: 18px;
+      margin-bottom: 14px;
+    }
+
+    .custom-group {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .custom-row {}
+
+    .custom-row label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.5;
+      margin-bottom: 6px;
+    }
+
+    .option-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      padding: 6px 16px;
+      border: 1.5px solid rgba(13,54,134,0.3);
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      background: transparent;
+      color: var(--navy);
+      font-family: var(--font-body);
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .chip:hover,
+    .chip.selected {
+      background: var(--navy);
+      color: var(--cream);
+      border-color: var(--navy);
+    }
+
+    /* Tamaños */
+    .size-options {
+      display: flex;
+      gap: 10px;
+    }
+
+    .size-card {
+      flex: 1;
+      border: 1.5px solid rgba(13,54,134,0.25);
+      padding: 12px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .size-card:hover,
+    .size-card.selected {
+      background: var(--navy);
+      color: var(--cream);
+      border-color: var(--navy);
+    }
+
+    .size-card .size-label {
+      font-family: var(--font-head);
+      font-size: 14px;
+      display: block;
+    }
+
+    .size-card .size-desc {
+      font-size: 10px;
+      opacity: 0.65;
+      margin-top: 2px;
+      display: block;
+    }
+
+    /* CTA */
+    .cta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-top: 4px;
+    }
+
+    .btn-fixed {
+      flex: none !important;
+      width: 140px;
+    }
+
+    .price {
+      font-family: var(--font-head);
+      font-size: 28px;
+    }
+
+    .price-note {
+      font-size: 11px;
+      opacity: 0.45;
+      margin-top: 2px;
+    }
+
+    .btn-primary {
+      padding: 12px 24px;
+      background: var(--navy);
+      color: var(--cream);
+      border: none;
+      font-family: var(--font-body);
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .btn-primary:hover { opacity: 0.85; }
+
+    .btn-secondary {
+      padding: 14px 20px;
+      background: transparent;
+      color: var(--navy);
+      border: 1.5px solid var(--navy);
+      font-family: var(--font-body);
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(13,54,134,0.07);
+    }
+
+    /* ── PRODUCT DETAILS TABS ── */
+    .product-tabs {
+      max-width: 1100px;
+      margin: 0 auto 56px;
+      padding: 0 48px;
+    }
+
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      border-bottom: 2px solid rgba(13,54,134,0.15);
+      margin-bottom: 28px;
+    }
+
+    .tab {
+      padding: 10px 24px;
+      font-size: 13px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      letter-spacing: 0.03em;
+    }
+
+    .tab.active {
+      border-bottom-color: var(--navy);
+      font-weight: bold;
+    }
+
+    .tab-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    .tab-block {}
+
+    .tab-block h3 {
+      font-family: var(--font-head);
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .tab-block p {
+      font-size: 14px;
+      line-height: 1.65;
+      opacity: 0.65;
+    }
+
+    .lorem-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .lorem-list li {
+      font-size: 13px;
+      opacity: 0.65;
+      list-style: none;
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .lorem-list li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      opacity: 0.4;
+    }
+
+    /* ── RELATED PRODUCTS ── */
+    .related {
+      background-color: var(--cream2);
+      padding: 48px;
+    }
+
+    .related-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .related h2 {
+      font-family: var(--font-head);
+      font-size: 28px;
+      margin-bottom: 28px;
+    }
+
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .related-card {
+      background: var(--white);
+      padding: var(--rel-padding, 10px) var(--rel-padding, 10px) calc(var(--rel-padding, 10px) + 6px);
+      box-shadow: 0 2px 8px rgba(13,54,134,0.08);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      cursor: pointer;
+    }
+
+    .related-card:hover {
+      transform: translateY(-3px) rotate(0.4deg);
+      box-shadow: 0 6px 18px rgba(13,54,134,0.14), 0 2px 4px rgba(0,0,0,0.08);
+    }
+
+    .related-card-img {
+      width: 100%;
+      aspect-ratio: 1;
+      background-color: var(--cream2);
+      border: 1.5px dashed rgba(13,54,134,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: monospace;
+      font-size: 10px;
+      color: rgba(13,54,134,0.35);
+      text-align: center;
+    }
+
+    .related-card-name {
+      font-family: var(--font-head);
+      font-size: var(--rel-name-size, 13px);
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .related-card-sub {
+      font-size: var(--rel-desc-size, 10px);
+      opacity: 0.5;
+      text-align: center;
+      margin-top: 3px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 820px) {
+      .product-hero { grid-template-columns: 1fr; gap: 32px; padding: 20px 20px 40px; }
+      .tab-content { grid-template-columns: 1fr; gap: 24px; }
+      .related-grid { grid-template-columns: repeat(2, 1fr); }
+      .product-tabs { padding: 0 20px; }
+      .related { padding: 32px 20px; }
+      .breadcrumb { padding: 16px 20px 0; }
+      .size-options { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER IMAGE -->
+  <header class="site-header">
+    <img src="uploads/header.png" alt="Paula's Desserts — navegación" />
+  </header>
+
+  <!-- BREADCRUMB -->
+  <nav class="breadcrumb">
+    Menú <span>›</span> Pasteles <span>›</span> Lorem ipsum
+  </nav>
+
+  <!-- PRODUCT HERO -->
+  <section class="product-hero">
+
+    <!-- Imagen principal + thumbnails -->
+    <div class="product-images">
+      <div class="product-main-img">
+        foto del producto<br/>1200 × 900 px
+      </div>
+      <a href="#" class="btn-personalizar">Personaliza tu postre</a>
+    </div>
+
+    <!-- Info y personalización -->
+    <div class="product-info">
+
+      <div>
+        <div class="product-category">Pasteles</div>
+        <h1 class="product-name">Lorem ipsum<br>dolor sit amet</h1>
+      </div>
+
+      <p class="product-tagline">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nisl nisl aliquam nisl.
+      </p>
+
+      <div class="tab-block">
+        <h3 style="font-family:var(--font-head);font-size:15px;margin-bottom:8px;color:var(--navy);">Contiene:</h3>
+        <ul class="lorem-list">
+          <li>Gluten (trigo)</li>
+          <li>Lácteos (mantequilla, leche)</li>
+          <li>Huevo</li>
+          <li>Puede contener trazas de frutos secos</li>
+        </ul>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Tamaño -->
+      <div class="custom-section">
+        <h2 class="custom-title">Elige el tamaño</h2>
+        <div class="size-options">
+          <div class="size-card">
+            <span class="size-label">Pequeño</span>
+            <span class="size-desc">6–8 porciones</span>
+          </div>
+          <div class="size-card selected">
+            <span class="size-label">Mediano</span>
+            <span class="size-desc">10–12 porciones</span>
+          </div>
+          <div class="size-card">
+            <span class="size-label">Grande</span>
+            <span class="size-desc">15–20 porciones</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Precio y CTA -->
+      <div class="cta-row">
+        <div class="price">$00</div>
+        <button class="btn-primary">Guardar</button>
+      </div>
+
+    </div>
+  </section>
+
+
+
+  <!-- RELATED PRODUCTS -->
+  <section class="related">
+    <div class="related-inner">
+      <h2>También te puede gustar</h2>
+      <hr style="border:none;border-top:2px solid rgba(13,54,134,0.18);margin:12px 0 24px;" />
+      <div class="related-grid">
+        <div class="related-card">
+          <img class="related-card-img" src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400&q=80" alt="Red Velvet" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;" />
+          <div class="related-card-name">Red Velvet</div>
+          <div class="related-card-sub">Pastel · Base red velvet · Nutella · Buttercream</div>
+        </div>
+        <div class="related-card">
+          <img class="related-card-img" src="https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=400&q=80" alt="Vainilla Clásico" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;" />
+          <div class="related-card-name">Vainilla Clásico</div>
+          <div class="related-card-sub">Cupcake · Esponja vainilla · Buttercream rosado</div>
+        </div>
+        <div class="related-card">
+          <img class="related-card-img" src="https://images.unsplash.com/photo-1548365328-8c6db3220e4c?w=400&q=80" alt="Avena & Canela" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;" />
+          <div class="related-card-name">Avena &amp; Canela</div>
+          <div class="related-card-sub">Galleta · Avena · Pasas · Canela</div>
+        </div>
+        <div class="related-card">
+          <img class="related-card-img" src="https://images.unsplash.com/photo-1535920527002-b35e96722eb9?w=400&q=80" alt="Mini Pie de Limón" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;" />
+          <div class="related-card-name">Mini Pie de Limón</div>
+          <div class="related-card-sub">Otros · Masa quebrada · Lemon curd · Merengue</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER IMAGE -->
+  <footer class="site-footer">
+    <img src="uploads/footer.png" alt="Paula's Desserts — footer" />
+  </footer>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <div id="tweaks-root"></div>
+
+  <script type="text/babel">
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "baseFontSize": 110,
+      "btnColor": "#6699cc",
+      "btnTextColor": "#f4ede2",
+      "relNameSize": 13,
+      "relDescSize": 10,
+      "relPadding": 10
+    }/*EDITMODE-END*/;
+
+    function ProductTweaks() {
+      const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+      React.useEffect(() => {
+        document.body.style.zoom = (tweaks.baseFontSize / 100).toString();
+      }, [tweaks.baseFontSize]);
+
+      React.useEffect(() => {
+        document.querySelector('.btn-personalizar').style.background = tweaks.btnColor;
+        document.querySelector('.btn-personalizar').style.color = tweaks.btnTextColor;
+      }, [tweaks.btnColor, tweaks.btnTextColor]);
+
+      React.useEffect(() => {
+        document.documentElement.style.setProperty('--rel-name-size', tweaks.relNameSize + 'px');
+        document.documentElement.style.setProperty('--rel-desc-size', tweaks.relDescSize + 'px');
+        document.documentElement.style.setProperty('--rel-padding', tweaks.relPadding + 'px');
+      }, [tweaks.relNameSize, tweaks.relDescSize, tweaks.relPadding]);
+
+      return (
+        <TweaksPanel>
+          <TweakSection label="Texto de las cards">
+            <TweakSlider label="Título" value={tweaks.relNameSize} min={10} max={24} step={1} onChange={v => setTweak('relNameSize', v)} />
+            <TweakSlider label="Descripción" value={tweaks.relDescSize} min={8} max={18} step={1} onChange={v => setTweak('relDescSize', v)} />
+          </TweakSection>
+          <TweakSection label="Layout de las cards">
+            <TweakSlider label="Padding" value={tweaks.relPadding} min={4} max={32} step={1} onChange={v => setTweak('relPadding', v)} />
+          </TweakSection>
+          <TweakSection label="Tipografía">
+            <TweakSlider
+              label="Tamaño de fuente global"
+              value={tweaks.baseFontSize}
+              min={70} max={130} step={5}
+              onChange={v => setTweak('baseFontSize', v)}
+            />
+          </TweakSection>
+          <TweakSection label="Botón Personaliza">
+            <TweakColor
+              label="Color del botón"
+              value={tweaks.btnColor}
+              onChange={v => setTweak('btnColor', v)}
+            />
+            <TweakColor
+              label="Color del texto"
+              value={tweaks.btnTextColor}
+              onChange={v => setTweak('btnTextColor', v)}
+            />
+          </TweakSection>
+        </TweaksPanel>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('tweaks-root')).render(<ProductTweaks />);
+  </script>
+
+</body>
+</html>
