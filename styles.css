@@ -143,7 +143,6 @@ main {
   text-decoration: none;
   font-size: clamp(0.72rem, 1.15vw, 0.95rem);
   font-weight: 700;
-  letter-spacing: 0.03em;
   display: inline-block;
   transition: transform 0.2s ease, text-shadow 0.2s ease;
 }
