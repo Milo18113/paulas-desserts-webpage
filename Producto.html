@@ -11,29 +11,6 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --cream:   rgb(244,237,226);
-      --cream2:  rgb(245,240,235);
-      --navy:    rgb(13,54,134);
-      --navy-dk: rgb(6,44,112);
-      --white:   #ffffff;
-      --font-head:  'DM Serif Display', serif;
-      --font-body:  Helvetica, Arial, sans-serif;
-    }
-
-    body {
-      background-color: var(--cream);
-      font-family: var(--font-body);
-      color: var(--navy);
-    }
-
-    /* ── HEADER / FOOTER IMAGES ── */
-    .site-header img,
-    .site-footer img {
-      width: 100%;
-      display: block;
-    }
-
     /* ── BREADCRUMB ── */
     .breadcrumb {
       max-width: 1100px;
@@ -59,20 +36,16 @@
       align-items: start;
     }
 
-    /* Image side */
-    .product-images {}
-
     .product-main-img {
       width: 100%;
       aspect-ratio: 4 / 3;
-      background-color: var(--cream2);
-      border: 1.5px dashed rgba(13,54,134,0.25);
+      background-color: var(--white);
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: monospace;
       font-size: 12px;
-      color: rgba(13,54,134,0.4);
+      color: rgba(var(--primary-blue-rgb), 0.4);
       letter-spacing: 0.03em;
       text-align: center;
       line-height: 1.6;
@@ -83,8 +56,8 @@
       width: 100%;
       margin-top: 14px;
       padding: 16px;
-      background: #E6AF7B;
-      color: var(--navy);
+      background: var(--color-accent);
+      color: var(--primary-blue);
       text-align: center;
       font-family: var(--font-body);
       font-size: 15px;
@@ -104,17 +77,16 @@
     .thumb {
       flex: 1;
       aspect-ratio: 1;
-      background-color: var(--cream2);
-      border: 1.5px dashed rgba(13,54,134,0.2);
+      background-color: var(--bg-color);
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: monospace;
       font-size: 10px;
-      color: rgba(13,54,134,0.35);
+      color: rgba(var(--primary-blue-rgb), 0.35);
     }
 
-    /* Info side */
+    /* ── PRODUCT INFO ── */
     .product-info {
       display: flex;
       flex-direction: column;
@@ -129,10 +101,10 @@
     }
 
     .product-name {
-      font-family: var(--font-head);
+      font-family: var(--font-heading);
       font-size: 38px;
       line-height: 1.1;
-      color: var(--navy);
+      color: var(--primary-blue);
     }
 
     .product-tagline {
@@ -143,14 +115,12 @@
 
     .divider {
       height: 1px;
-      background: rgba(13,54,134,0.15);
+      background: rgba(var(--primary-blue-rgb), 0.15);
     }
 
-    /* Customization */
-    .custom-section {}
-
+    /* ── PERSONALIZACIÓN ── */
     .custom-title {
-      font-family: var(--font-head);
+      font-family: var(--font-heading);
       font-size: 18px;
       margin-bottom: 14px;
     }
@@ -160,8 +130,6 @@
       flex-direction: column;
       gap: 14px;
     }
-
-    .custom-row {}
 
     .custom-row label {
       display: block;
@@ -180,32 +148,29 @@
 
     .chip {
       padding: 6px 16px;
-      border: 1.5px solid rgba(13,54,134,0.3);
+      border: 1.5px solid rgba(var(--primary-blue-rgb), 0.3);
       border-radius: 20px;
       font-size: 13px;
       cursor: pointer;
       background: transparent;
-      color: var(--navy);
+      color: var(--primary-blue);
       font-family: var(--font-body);
       transition: background 0.15s, border-color 0.15s;
     }
 
     .chip:hover,
     .chip.selected {
-      background: var(--navy);
-      color: var(--cream);
-      border-color: var(--navy);
+      background: var(--primary-blue);
+      color: var(--bg-color);
+      border-color: var(--primary-blue);
     }
 
-    /* Tamaños */
-    .size-options {
-      display: flex;
-      gap: 10px;
-    }
+    /* ── TAMAÑOS ── */
+    .size-options { display: flex; gap: 10px; }
 
     .size-card {
       flex: 1;
-      border: 1.5px solid rgba(13,54,134,0.25);
+      border: 1.5px solid rgba(var(--primary-blue-rgb), 0.25);
       padding: 12px 10px;
       text-align: center;
       cursor: pointer;
@@ -214,13 +179,13 @@
 
     .size-card:hover,
     .size-card.selected {
-      background: var(--navy);
-      color: var(--cream);
-      border-color: var(--navy);
+      background: var(--primary-blue);
+      color: var(--bg-color);
+      border-color: var(--primary-blue);
     }
 
     .size-card .size-label {
-      font-family: var(--font-head);
+      font-family: var(--font-heading);
       font-size: 14px;
       display: block;
     }
@@ -232,7 +197,7 @@
       display: block;
     }
 
-    /* CTA */
+    /* ── CTA ── */
     .cta-row {
       display: flex;
       align-items: center;
@@ -241,26 +206,19 @@
       padding-top: 4px;
     }
 
-    .btn-fixed {
-      flex: none !important;
-      width: 140px;
-    }
+    .btn-fixed { flex: none !important; width: 140px; }
 
     .price {
-      font-family: var(--font-head);
+      font-family: var(--font-heading);
       font-size: 28px;
     }
 
-    .price-note {
-      font-size: 11px;
-      opacity: 0.45;
-      margin-top: 2px;
-    }
+    .price-note { font-size: 11px; opacity: 0.45; margin-top: 2px; }
 
     .btn-primary {
       padding: 12px 24px;
-      background: var(--navy);
-      color: var(--cream);
+      background: var(--primary-blue);
+      color: var(--bg-color);
       border: none;
       font-family: var(--font-body);
       font-size: 14px;
@@ -274,19 +232,17 @@
     .btn-secondary {
       padding: 14px 20px;
       background: transparent;
-      color: var(--navy);
-      border: 1.5px solid var(--navy);
+      color: var(--primary-blue);
+      border: 1.5px solid var(--primary-blue);
       font-family: var(--font-body);
       font-size: 13px;
       cursor: pointer;
       transition: background 0.15s;
     }
 
-    .btn-secondary:hover {
-      background: rgba(13,54,134,0.07);
-    }
+    .btn-secondary:hover { background: rgba(var(--primary-blue-rgb), 0.07); }
 
-    /* ── PRODUCT DETAILS TABS ── */
+    /* ── TABS ── */
     .product-tabs {
       max-width: 1100px;
       margin: 0 auto 56px;
@@ -295,8 +251,7 @@
 
     .tab-bar {
       display: flex;
-      gap: 0;
-      border-bottom: 2px solid rgba(13,54,134,0.15);
+      border-bottom: 2px solid rgba(var(--primary-blue-rgb), 0.15);
       margin-bottom: 28px;
     }
 
@@ -309,37 +264,19 @@
       letter-spacing: 0.03em;
     }
 
-    .tab.active {
-      border-bottom-color: var(--navy);
-      font-weight: bold;
-    }
+    .tab.active { border-bottom-color: var(--primary-blue); font-weight: bold; }
 
-    .tab-content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-    }
-
-    .tab-block {}
+    .tab-content { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
 
     .tab-block h3 {
-      font-family: var(--font-head);
+      font-family: var(--font-heading);
       font-size: 18px;
       margin-bottom: 10px;
     }
 
-    .tab-block p {
-      font-size: 14px;
-      line-height: 1.65;
-      opacity: 0.65;
-    }
+    .tab-block p { font-size: 14px; line-height: 1.65; opacity: 0.65; }
 
-    .lorem-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 4px;
-    }
+    .lorem-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
 
     .lorem-list li {
       font-size: 13px;
@@ -350,81 +287,21 @@
       line-height: 1.5;
     }
 
-    .lorem-list li::before {
-      content: '—';
-      position: absolute;
-      left: 0;
-      opacity: 0.4;
-    }
+    .lorem-list li::before { content: '—'; position: absolute; left: 0; opacity: 0.4; }
 
-    /* ── RELATED PRODUCTS ── */
-    .related {
-      background-color: var(--cream2);
-      padding: 48px;
-    }
+    /* ── PRODUCTOS RELACIONADOS ── */
+    .related { background-color: var(--bg-color); padding: 48px; }
 
-    .related-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
+    .related-inner { max-width: 1100px; margin: 0 auto; }
 
-    .related h2 {
-      font-family: var(--font-head);
-      font-size: 28px;
-      margin-bottom: 28px;
-    }
+    .related h2 { font-family: var(--font-heading); font-size: 28px; margin-bottom: 28px; }
 
-    .related-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-
-    .related-card {
-      background: var(--white);
-      padding: 10px 10px calc(10px + 6px);
-      box-shadow: 0 2px 8px rgba(13,54,134,0.08);
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
-      cursor: pointer;
-    }
-
-    .related-card:hover {
-      transform: translateY(-3px) rotate(0.4deg);
-      box-shadow: 0 6px 18px rgba(13,54,134,0.14), 0 2px 4px rgba(0,0,0,0.08);
-    }
-
-    .related-card-img {
-      width: 100%;
-      aspect-ratio: 1;
-      background-color: var(--cream2);
-      border: 1.5px dashed rgba(13,54,134,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: monospace;
-      font-size: 10px;
-      color: rgba(13,54,134,0.35);
-      text-align: center;
-    }
-
-    .related-card-name {
-      font-family: var(--font-head);
-      font-size: 13px;
-      margin-top: 10px;
-      text-align: center;
-    }
-
-    .related-card-sub {
-      font-size: 10px;
-      opacity: 0.5;
-      text-align: center;
-      margin-top: 3px;
-    }
+    .related-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 820px) {
       .product-hero { grid-template-columns: 1fr; gap: 32px; padding: 20px 20px 40px; }
-      .tab-content { grid-template-columns: 1fr; gap: 24px; }
+      .tab-content { grid-template-columns: 1fr; }
       .related-grid { grid-template-columns: repeat(2, 1fr); }
       .product-tabs { padding: 0 20px; }
       .related { padding: 32px 20px; }
@@ -528,35 +405,48 @@
   <section class="related">
     <div class="related-inner">
       <h2>También te puede gustar</h2>
-      <hr style="border:none;border-top:2px solid rgba(13,54,134,0.18);margin:12px 0 24px;" />
+      <hr style="border:none;border-top:2px solid rgba(var(--primary-blue-rgb), 0.18);margin:12px 0 24px;" />
       <div class="related-grid">
-        <div class="related-card">
-          <img class="related-card-img" src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400&q=80" alt="Red Velvet" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;" />
-          <div class="related-card-name">Red Velvet</div>
-          <div class="related-card-sub">Pastel · Base red velvet · Nutella · Buttercream</div>
+        <div class="polaroid">
+          <img class="polaroid-img" src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400&q=80" alt="Red Velvet" />
+          <div class="polaroid-label">
+            <div class="product-name">Red Velvet</div>
+            <div class="product-desc">Pastel · Base red velvet · Nutella · Buttercream</div>
+          </div>
         </div>
-        <div class="related-card">
-          <img class="related-card-img" src="https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=400&q=80" alt="Vainilla Clásico" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;" />
-          <div class="related-card-name">Vainilla Clásico</div>
-          <div class="related-card-sub">Cupcake · Esponja vainilla · Buttercream rosado</div>
+        <div class="polaroid">
+          <img class="polaroid-img" src="https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=400&q=80" alt="Vainilla Clásico" />
+          <div class="polaroid-label">
+            <div class="product-name">Vainilla Clásico</div>
+            <div class="product-desc">Cupcake · Esponja vainilla · Buttercream rosado</div>
+          </div>
         </div>
-        <div class="related-card">
-          <img class="related-card-img" src="https://images.unsplash.com/photo-1548365328-8c6db3220e4c?w=400&q=80" alt="Avena & Canela" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;" />
-          <div class="related-card-name">Avena &amp; Canela</div>
-          <div class="related-card-sub">Galleta · Avena · Pasas · Canela</div>
+        <div class="polaroid">
+          <img class="polaroid-img" src="https://images.unsplash.com/photo-1548365328-8c6db3220e4c?w=400&q=80" alt="Avena & Canela" />
+          <div class="polaroid-label">
+            <div class="product-name">Avena &amp; Canela</div>
+            <div class="product-desc">Galleta · Avena · Pasas · Canela</div>
+          </div>
         </div>
-        <div class="related-card">
-          <img class="related-card-img" src="https://images.unsplash.com/photo-1535920527002-b35e96722eb9?w=400&q=80" alt="Mini Pie de Limón" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;" />
-          <div class="related-card-name">Mini Pie de Limón</div>
-          <div class="related-card-sub">Otros · Masa quebrada · Lemon curd · Merengue</div>
+        <div class="polaroid">
+          <img class="polaroid-img" src="https://images.unsplash.com/photo-1535920527002-b35e96722eb9?w=400&q=80" alt="Mini Pie de Limón" />
+          <div class="polaroid-label">
+            <div class="product-name">Mini Pie de Limón</div>
+            <div class="product-desc">Otros · Masa quebrada · Lemon curd · Merengue</div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FOOTER IMAGE -->
-  <footer class="site-footer">
-    <img src="uploads/footer.png" alt="Paula's Desserts — footer" />
+  <footer class="about-site-footer">
+    <div class="about-footer-row">
+      <span class="about-footer-dash"></span>
+      <div class="about-footer-logo-wrap">
+        <img class="about-footer-logo-img" src="Paula's_Desserts/LogoAzul.png" alt="Paula's Desserts" />
+      </div>
+      <span class="about-footer-dash"></span>
+    </div>
   </footer>
 
 

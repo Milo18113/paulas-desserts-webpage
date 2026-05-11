@@ -116,59 +116,7 @@
       flex-shrink: 0;
     }
 
-    /* ── POLAROID GRID ── */
-    .polaroid-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-    }
-
-    /* ── POLAROID CARD ── */
-    .polaroid {
-      background: var(--white);
-      padding: 12px 12px calc(12px + 6px);
-      box-shadow: 0 2px 8px rgba(13,54,134,0.10), 0 1px 2px rgba(0,0,0,0.06);
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
-      cursor: default;
-    }
-
-    .polaroid:hover {
-      transform: translateY(-3px) rotate(0.4deg);
-      box-shadow: 0 6px 18px rgba(13,54,134,0.14), 0 2px 4px rgba(0,0,0,0.08);
-    }
-
-    .polaroid-img {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      display: block;
-      background: var(--cream2);
-    }
-
-    .polaroid-label {
-      padding-top: 10px;
-      text-align: center;
-    }
-
-    .polaroid-label .product-name {
-      font-family: var(--font-head);
-      font-size: 18px;
-      color: var(--navy);
-      line-height: 1.3;
-    }
-
-    .polaroid-label .product-desc {
-      font-size: 12px;
-      color: var(--navy);
-      opacity: 0.55;
-      margin-top: 2px;
-      line-height: 1.35;
-    }
-
-    /* ── FOOTER ── */
+/* ── FOOTER ── */
     footer {
       background-color: var(--navy-dk);
       color: var(--cream);
@@ -258,7 +206,8 @@
       <h2 class="cat-section-title"><span class="dot"></span>Pasteles</h2>
       <div class="polaroid-grid">
 
-        <div class="polaroid">
+        <!-- es un link -->
+        <a class="polaroid" href="Producto.html">
           <img class="polaroid-img"
             src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&q=80"
             alt="Pastel de chocolate con ganache" />
@@ -266,7 +215,7 @@
             <div class="product-name">Chocolate &amp; Ganache</div>
             <div class="product-desc">Base chocolate · Relleno manjar · Ganache</div>
           </div>
-        </div>
+        </a>
 
         <div class="polaroid">
           <img class="polaroid-img"
