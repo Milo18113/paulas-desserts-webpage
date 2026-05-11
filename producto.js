@@ -60,7 +60,7 @@ async function loadCatalogo() {
     catalogo = await loadCatalogo();
   } catch {
     mostrarError(
-      'No se pudo cargar el catálogo. Incluye <code>&lt;script src=&quot;catalogo.embed.js&quot;&gt;&lt;/script&gt;</code> antes de <code>producto.js</code>, o usa <code>npx serve .</code>'
+      'No se pudo cargar el catálogo. En <code>Producto.html</code>, incluye <code>&lt;script src=&quot;catalogo.embed.js&quot;&gt;&lt;/script&gt;</code> <strong>antes</strong> de <code>producto.js</code>, o abre el sitio con un servidor (por ejemplo <code>npx serve .</code>).'
     );
     return;
   }
@@ -584,7 +584,7 @@ function buildMensajePedido(producto) {
 
   const line = (label, val) => (val ? `\n- ${label}: ${val}` : '');
 
-  let msg = [
+  const msg = [
     "Hola Paula's Desserts!",
     '',
     '=== PERSONALIZACIÓN DE PEDIDO ===',
