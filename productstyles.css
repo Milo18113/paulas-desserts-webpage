@@ -1,45 +1,83 @@
 /* ==========================================================================
-   productstyles.css — Estilos para páginas de producto
-   Se carga DESPUÉS de styles.css. Reutiliza las variables globales
-   (--primary-blue, --bg-color, --font-heading, etc.) sin redefinirlas.
+   productstyles.css — Página de producto / personalización
+   Tokens: DESIGN.md vía variables en styles.css (:root).
    ========================================================================== */
 
+/* --------------------------------------------------------------------------
+   Base de página (solo Producto.html carga este archivo)
+   -------------------------------------------------------------------------- */
 
-/* ==========================================================================
-   RESET LOCAL
-   Reset agresivo encapsulado a páginas de producto. NO afecta a Menu,
-   index ni SobreNosotros porque ellas no cargan este archivo.
-   ========================================================================== */
-
-*, *::before, *::after {
-  margin: 0;
-  padding: 0;
+body.product-page {
+  font-family: var(--font-body);
+  color: var(--color-text);
 }
 
+body.product-page .header,
+body.product-page .header .brand-title,
+body.product-page .menu a,
+body.product-page .dropbtn {
+  color: var(--color-primary);
+}
 
-/* ==========================================================================
-   BREADCRUMB
-   Migas de pan "Menú › Categoría › Producto" arriba de la página.
-   ========================================================================== */
+/* --------------------------------------------------------------------------
+   Utilidades
+   -------------------------------------------------------------------------- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Migas de pan
+   -------------------------------------------------------------------------- */
 
 .breadcrumb {
   max-width: 1100px;
   margin: 0 auto;
   padding: 20px 48px 0;
-  font-size: 12px;
-  opacity: 0.55;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-text);
+  opacity: 0.72;
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
   align-items: center;
 }
 
-.breadcrumb span { opacity: 0.45; }
+.breadcrumb a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+  opacity: 0.85;
+}
 
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
 
-/* ==========================================================================
-   PRODUCT HERO
-   Bloque principal de dos columnas: imagen + información del producto.
-   ========================================================================== */
+.breadcrumb-sep {
+  opacity: 0.45;
+  user-select: none;
+}
+
+.breadcrumb-current {
+  font-weight: 600;
+  color: var(--color-primary);
+  opacity: 0.95;
+}
+
+/* --------------------------------------------------------------------------
+   Hero producto — dos columnas
+   -------------------------------------------------------------------------- */
 
 .product-hero {
   max-width: 1100px;
@@ -47,322 +85,405 @@
   padding: 28px 48px 56px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 56px;
+  gap: clamp(32px, 5vw, 56px);
   align-items: start;
 }
 
-/* Imagen principal del producto (placeholder mientras no haya foto real) */
+.product-images {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
 .product-main-img {
   width: 100%;
   aspect-ratio: 4 / 3;
-  background-color: var(--white);
+  background-color: var(--color-white);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: monospace;
-  font-size: 12px;
-  color: rgba(var(--primary-blue-rgb), 0.4);
-  letter-spacing: 0.03em;
   text-align: center;
   line-height: 1.6;
+  box-shadow:
+    0 2px 8px rgba(13, 54, 134, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
-/* Fila de thumbnails debajo de la imagen principal */
-.product-thumbnails {
-  display: flex;
-  gap: 10px;
-  margin-top: 12px;
+.product-img-placeholder {
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: rgba(var(--primary-blue-rgb), 0.42);
+  padding: 16px;
 }
 
-.thumb {
-  flex: 1;
-  aspect-ratio: 1;
-  background-color: var(--bg-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: monospace;
-  font-size: 10px;
-  color: rgba(var(--primary-blue-rgb), 0.35);
+.product-img-el {
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* Columna derecha del hero: categoría, nombre, tagline, personalización, CTA */
+.product-img-el.is-visible {
+  display: block;
+}
+
 .product-info {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
+}
+
+.product-info-head {
+  margin: 0;
 }
 
 .product-category {
+  font-family: var(--font-body);
   font-size: 11px;
-  letter-spacing: 0.12em;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  opacity: 0.5;
+  color: var(--color-accent);
+  margin-bottom: 8px;
 }
 
 .product-name {
   font-family: var(--font-heading);
-  font-size: 38px;
-  line-height: 1.1;
-  color: var(--primary-blue);
+  font-size: clamp(1.75rem, 3.2vw, 2.35rem);
+  line-height: 1.12;
+  color: var(--color-primary);
+  margin: 0;
 }
 
 .product-tagline {
+  font-family: var(--font-body);
   font-size: 15px;
-  line-height: 1.6;
-  opacity: 0.65;
+  line-height: 1.65;
+  color: var(--color-text);
+  opacity: 0.88;
+  margin: 0;
 }
 
+.contains-title {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  margin: 0 0 10px;
+  color: var(--color-primary);
+}
 
-/* ==========================================================================
-   DIVIDER
-   Línea separadora horizontal sutil.
-   ========================================================================== */
+.tab-block {
+  margin: 0;
+}
 
 .divider {
   height: 1px;
-  background: rgba(var(--primary-blue-rgb), 0.15);
+  background: rgba(var(--primary-blue-rgb), 0.14);
+  border: none;
+  margin: 0;
 }
 
+.divider--inner {
+  margin: 4px 0;
+}
 
-/* ==========================================================================
-   PERSONALIZACIÓN
-   Bloque de opciones del producto (chips de sabores, tamaños, etc.).
-   ========================================================================== */
+/* --------------------------------------------------------------------------
+   Panel de personalización
+   -------------------------------------------------------------------------- */
+
+.product-custom-panel {
+  background: var(--color-bg-soft);
+  border: 1px solid rgba(var(--primary-blue-rgb), 0.1);
+  padding: clamp(18px, 3vw, 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
 .custom-title {
   font-family: var(--font-heading);
-  font-size: 18px;
-  margin-bottom: 14px;
+  font-size: 1.35rem;
+  color: var(--color-primary);
+  margin: 0;
 }
 
-.custom-group {
+.custom-title--sub {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.custom-hint {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text);
+  opacity: 0.78;
+  margin: -6px 0 0;
+}
+
+.custom-section {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 
-.custom-row label {
-  display: block;
+.custom-section--chips.is-hidden {
+  display: none;
+}
+
+.custom-row-label {
+  font-family: var(--font-body);
   font-size: 11px;
-  letter-spacing: 0.08em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  opacity: 0.5;
-  margin-bottom: 6px;
+  color: var(--color-primary);
+  opacity: 0.55;
+  margin: 0;
 }
 
-/* Fila de chips para opciones múltiples */
 .option-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
 }
 
-/* Chip individual seleccionable (sabor, relleno, etc.) */
 .chip {
-  padding: 6px 16px;
-  border: 1.5px solid rgba(var(--primary-blue-rgb), 0.3);
+  padding: 8px 18px;
+  border: 1.5px solid rgba(var(--primary-blue-rgb), 0.35);
   border-radius: 20px;
   font-size: 13px;
   cursor: pointer;
   background: transparent;
-  color: var(--primary-blue);
+  color: var(--color-primary);
   font-family: var(--font-body);
-  transition: background 0.15s, border-color 0.15s;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .chip:hover,
-.chip.selected {
-  background: var(--primary-blue);
-  color: var(--bg-color);
-  border-color: var(--primary-blue);
+.chip:focus-visible {
+  background: var(--color-primary);
+  color: var(--color-bg);
+  border-color: var(--color-primary);
+  outline: none;
 }
 
+.chip.selected {
+  background: var(--color-primary);
+  color: var(--color-bg);
+  border-color: var(--color-primary);
+}
 
-/* ==========================================================================
-   TAMAÑOS
-   Selector de tamaño del producto (Pequeño / Mediano / Grande).
-   ========================================================================== */
-
+/* Tamaños */
 .size-options {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
 .size-card {
   flex: 1;
-  border: 1.5px solid rgba(var(--primary-blue-rgb), 0.25);
-  padding: 12px 10px;
+  min-width: 0;
+  border: 1.5px solid rgba(var(--primary-blue-rgb), 0.35);
+  padding: 14px 12px;
   text-align: center;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  background: var(--color-white);
+  color: var(--color-primary);
+  font-family: var(--font-body);
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .size-card:hover,
+.size-card:focus-visible {
+  background: var(--color-primary);
+  color: var(--color-bg);
+  border-color: var(--color-primary);
+  outline: none;
+}
+
 .size-card.selected {
-  background: var(--primary-blue);
-  color: var(--bg-color);
-  border-color: var(--primary-blue);
+  background: var(--color-primary);
+  color: var(--color-bg);
+  border-color: var(--color-primary);
 }
 
 .size-card .size-label {
   font-family: var(--font-heading);
-  font-size: 14px;
+  font-size: 15px;
   display: block;
 }
 
 .size-card .size-desc {
-  font-size: 10px;
-  opacity: 0.65;
-  margin-top: 2px;
+  font-size: 11px;
   display: block;
+  margin-top: 4px;
+  opacity: 0.72;
 }
 
+.size-card.selected .size-desc {
+  color: inherit;
+  opacity: 0.88;
+}
 
-/* ==========================================================================
-   CTA — PRECIO + BOTÓN GUARDAR
-   Fila final del hero de producto.
-   ========================================================================== */
+.notas-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  opacity: 0.65;
+}
+
+.optional {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: 0.75;
+}
+
+.product-notas {
+  width: 100%;
+  resize: vertical;
+  min-height: 88px;
+  padding: 12px 14px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--color-text);
+  background: var(--color-white);
+  border: 1.5px solid rgba(var(--primary-blue-rgb), 0.22);
+  border-radius: 0;
+}
+
+.product-notas:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-color: var(--color-primary);
+}
+
+.product-personalizacion-resumen {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-primary);
+  opacity: 0.85;
+  margin: 0;
+  min-height: 1.4em;
+}
 
 .cta-row {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
+  flex-wrap: wrap;
   padding-top: 4px;
 }
 
-.btn-fixed {
-  flex: none !important;
-  width: 140px;
+.price-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .price {
   font-family: var(--font-heading);
-  font-size: 28px;
+  font-size: clamp(1.65rem, 3vw, 2rem);
+  color: var(--color-primary);
+  line-height: 1;
 }
 
 .price-note {
   font-size: 11px;
-  opacity: 0.45;
-  margin-top: 2px;
+  opacity: 0.5;
+  margin: 0;
+  font-family: var(--font-body);
 }
 
-
-/* ==========================================================================
-   BOTONES
-   ========================================================================== */
-
-/* Botón "Personaliza tu postre" — accent celeste, ancho completo */
 .btn-personalizar {
   display: block;
   width: 100%;
   margin-top: 14px;
-  padding: 16px;
+  padding: 16px 18px;
   background: var(--color-accent);
-  color: var(--primary-blue);
+  color: var(--color-primary);
   text-align: center;
   font-family: var(--font-body);
   font-size: 15px;
+  font-weight: 700;
   letter-spacing: 0.04em;
-  text-decoration: none;
-  transition: opacity 0.15s;
-}
-
-.btn-personalizar:hover { opacity: 0.85; }
-
-/* Botón primario — azul sólido, texto crema */
-.btn-primary {
-  padding: 12px 24px;
-  background: var(--primary-blue);
-  color: var(--bg-color);
   border: none;
+  border-radius: 0;
+  cursor: pointer;
+  transition:
+    filter 0.15s ease,
+    transform 0.12s ease;
+}
+
+.btn-personalizar:hover {
+  filter: brightness(1.03);
+}
+
+.btn-personalizar:active {
+  transform: translateY(1px);
+}
+
+.btn-personalizar:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+.btn-primary {
+  padding: 14px 28px;
+  background: var(--color-primary);
+  color: var(--color-bg);
+  border: none;
+  border-radius: 0;
   font-family: var(--font-body);
   font-size: 14px;
-  letter-spacing: 0.04em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   cursor: pointer;
-  transition: opacity 0.15s;
+  transition: opacity 0.15s ease;
 }
 
-.btn-primary:hover { opacity: 0.85; }
-
-/* Botón secundario — outline azul */
-.btn-secondary {
-  padding: 14px 20px;
-  background: transparent;
-  color: var(--primary-blue);
-  border: 1.5px solid var(--primary-blue);
-  font-family: var(--font-body);
-  font-size: 13px;
-  cursor: pointer;
-  transition: background 0.15s;
+.btn-primary:hover {
+  opacity: 0.92;
 }
 
-.btn-secondary:hover { background: rgba(var(--primary-blue-rgb), 0.07); }
-
-
-/* ==========================================================================
-   TABS DE DETALLE DEL PRODUCTO
-   Pestañas debajo del hero (Descripción, Ingredientes, etc.).
-   ========================================================================== */
-
-.product-tabs {
-  max-width: 1100px;
-  margin: 0 auto 56px;
-  padding: 0 48px;
+.btn-primary:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
 }
 
-.tab-bar {
-  display: flex;
-  border-bottom: 2px solid rgba(var(--primary-blue-rgb), 0.15);
-  margin-bottom: 28px;
+.btn-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
-.tab {
-  padding: 10px 24px;
-  font-size: 13px;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  letter-spacing: 0.03em;
-}
-
-.tab.active {
-  border-bottom-color: var(--primary-blue);
-  font-weight: bold;
-}
-
-.tab-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-}
-
-.tab-block h3 {
-  font-family: var(--font-heading);
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.tab-block p {
-  font-size: 14px;
-  line-height: 1.65;
-  opacity: 0.65;
-}
-
-/* Lista decorada con guiones largos (ingredientes, alérgenos, etc.) */
 .lorem-list {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: 4px;
+  margin: 0;
+  padding: 0;
 }
 
 .lorem-list li {
-  font-size: 13px;
-  opacity: 0.65;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-text);
+  opacity: 0.85;
   list-style: none;
-  padding-left: 16px;
+  padding-left: 18px;
   position: relative;
   line-height: 1.5;
 }
@@ -372,16 +493,15 @@
   position: absolute;
   left: 0;
   opacity: 0.4;
+  color: var(--color-primary);
 }
 
-
-/* ==========================================================================
-   PRODUCTOS RELACIONADOS
-   Sección al final con polaroids de productos similares.
-   ========================================================================== */
+/* --------------------------------------------------------------------------
+   Relacionados
+   -------------------------------------------------------------------------- */
 
 .related {
-  background-color: var(--bg-color);
+  background-color: var(--color-bg);
   padding: 48px;
 }
 
@@ -392,8 +512,15 @@
 
 .related h2 {
   font-family: var(--font-heading);
-  font-size: 28px;
-  margin-bottom: 28px;
+  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  color: var(--color-primary);
+  margin: 0 0 8px;
+}
+
+.related-rule {
+  border: none;
+  border-top: 2px solid rgba(var(--primary-blue-rgb), 0.18);
+  margin: 12px 0 24px;
 }
 
 .related-grid {
@@ -402,27 +529,219 @@
   gap: 16px;
 }
 
+.related .polaroid {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
 
-/* ==========================================================================
-   RESPONSIVE — MÓVIL/TABLET (≤ 820px)
-   ========================================================================== */
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+
+#related-section[hidden] {
+  display: none !important;
+}
+
+.cta-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 22px;
+  background: #25d366;
+  color: #fff !important;
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border: none;
+  border-radius: 0;
+  transition: filter 0.15s ease, opacity 0.15s ease;
+}
+
+.btn-whatsapp:hover {
+  filter: brightness(1.05);
+}
+
+.btn-whatsapp:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+.product-cantidad-input {
+  width: 100%;
+  max-width: 120px;
+  padding: 10px 12px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  border: 1.5px solid rgba(var(--primary-blue-rgb), 0.22);
+  background: var(--color-white);
+  color: var(--color-text);
+}
+
+.product-cantidad-input:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-color: var(--color-primary);
+}
+
+/* Selector cuando no hay ?id= */
+.product-picker {
+  grid-column: 1 / -1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 8px 0 32px;
+}
+
+.product-picker-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  color: var(--color-primary);
+  margin: 0 0 10px;
+  text-align: center;
+}
+
+.product-picker-lead {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-text);
+  opacity: 0.85;
+  text-align: center;
+  max-width: 52ch;
+  margin: 0 auto 28px;
+}
+
+.product-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.product-picker-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  background: var(--color-white);
+  border: 1px solid rgba(var(--primary-blue-rgb), 0.12);
+  box-shadow: 0 2px 10px rgba(28, 59, 128, 0.08);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.product-picker-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(28, 59, 128, 0.12);
+}
+
+.product-picker-img-wrap {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--color-bg-soft);
+}
+
+.product-picker-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.product-picker-noimg {
+  width: 100%;
+  height: 100%;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: rgba(var(--primary-blue-rgb), 0.4);
+  font-family: var(--font-body);
+}
+
+.product-picker-body {
+  padding: 14px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.product-picker-cat {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.product-picker-name {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  color: var(--color-primary);
+}
+
+.product-picker-desc {
+  font-size: 13px;
+  line-height: 1.45;
+  opacity: 0.78;
+}
+
+.polaroid-img--empty {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: rgba(var(--primary-blue-rgb), 0.38);
+  font-family: var(--font-body);
+  background: var(--color-bg-soft);
+}
 
 @media (max-width: 820px) {
   .product-hero {
     grid-template-columns: 1fr;
-    gap: 32px;
     padding: 20px 20px 40px;
   }
 
-  .tab-content { grid-template-columns: 1fr; }
+  .related-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-  .related-grid { grid-template-columns: repeat(2, 1fr); }
+  .related {
+    padding: 32px 20px;
+  }
 
-  .product-tabs { padding: 0 20px; }
+  .breadcrumb {
+    padding: 16px 20px 0;
+  }
 
-  .related { padding: 32px 20px; }
+  .size-options {
+    flex-direction: column;
+  }
 
-  .breadcrumb { padding: 16px 20px 0; }
+  .size-card {
+    flex: none;
+    width: 100%;
+  }
 
-  .size-options { flex-wrap: wrap; }
+  .cta-buttons {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-primary,
+  .btn-whatsapp {
+    width: 100%;
+    justify-content: center;
+  }
 }

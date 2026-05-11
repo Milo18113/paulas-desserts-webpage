@@ -9,6 +9,12 @@
   --primary-blue-rgb: 28, 59, 128;
   --color-secondary: #2f5b9e;
   --color-accent: #7ba5d0;
+  /* Alias DESIGN.md (mismo sistema que --primary-blue / --bg-color) */
+  --color-bg: #f4ede2;
+  --color-primary: #1c3b80;
+  --color-text: #1f1f1f;
+  --color-white: #ffffff;
+  --color-bg-soft: #f5f0eb;
   --text-color: #1c3b80;
   --bg-color: #f4ede2;
   --white: #ffffff;
