@@ -295,8 +295,8 @@ main {
 
 /* Ajustes de espaciado específicos para la sección del catálogo en el index */
 #catalogo.section {
-  padding-top: clamp(20px, 3.5vw, 32px);
-  padding-bottom: clamp(44px, 7vw, 72px);
+  padding-top: clamp(90px, 3.5vw, 32px);
+  padding-bottom: clamp(130px, 7vw, 90px);
 }
 
 #catalogo .subtitle {
