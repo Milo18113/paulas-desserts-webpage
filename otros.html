@@ -38,9 +38,7 @@
 </style>
 </head>
 <body>
-  <div class="page-frame">
-        
-    <div id="nav-placeholder"></div>
+
 
 <header class="page-header">
   <p class="eyebrow">Paula's Desserts</p>
@@ -125,12 +123,5 @@
   <strong>Paula's Desserts</strong><br>
   ¿Tienes un evento en mente? Hagámoslo realidad.
 </footer>
-<script>
-  fetch('nav.html')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('nav-placeholder').innerHTML = data;
-    });
-</script>
 </body>
 </html>
