@@ -381,7 +381,7 @@
 
     .related-card {
       background: var(--white);
-      padding: var(--rel-padding, 10px) var(--rel-padding, 10px) calc(var(--rel-padding, 10px) + 6px);
+      padding: 10px 10px calc(10px + 6px);
       box-shadow: 0 2px 8px rgba(13,54,134,0.08);
       transition: transform 0.18s ease, box-shadow 0.18s ease;
       cursor: pointer;
@@ -408,13 +408,13 @@
 
     .related-card-name {
       font-family: var(--font-head);
-      font-size: var(--rel-name-size, 13px);
+      font-size: 13px;
       margin-top: 10px;
       text-align: center;
     }
 
     .related-card-sub {
-      font-size: var(--rel-desc-size, 10px);
+      font-size: 10px;
       opacity: 0.5;
       text-align: center;
       margin-top: 3px;
@@ -546,75 +546,6 @@
     <img src="uploads/footer.png" alt="Paula's Desserts — footer" />
   </footer>
 
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-  <script type="text/babel" src="tweaks-panel.jsx"></script>
-  <div id="tweaks-root"></div>
-
-  <script type="text/babel">
-    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-      "baseFontSize": 110,
-      "btnColor": "#6699cc",
-      "btnTextColor": "#f4ede2",
-      "relNameSize": 13,
-      "relDescSize": 10,
-      "relPadding": 10
-    }/*EDITMODE-END*/;
-
-    function ProductTweaks() {
-      const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
-
-      React.useEffect(() => {
-        document.body.style.zoom = (tweaks.baseFontSize / 100).toString();
-      }, [tweaks.baseFontSize]);
-
-      React.useEffect(() => {
-        document.querySelector('.btn-personalizar').style.background = tweaks.btnColor;
-        document.querySelector('.btn-personalizar').style.color = tweaks.btnTextColor;
-      }, [tweaks.btnColor, tweaks.btnTextColor]);
-
-      React.useEffect(() => {
-        document.documentElement.style.setProperty('--rel-name-size', tweaks.relNameSize + 'px');
-        document.documentElement.style.setProperty('--rel-desc-size', tweaks.relDescSize + 'px');
-        document.documentElement.style.setProperty('--rel-padding', tweaks.relPadding + 'px');
-      }, [tweaks.relNameSize, tweaks.relDescSize, tweaks.relPadding]);
-
-      return (
-        <TweaksPanel>
-          <TweakSection label="Texto de las cards">
-            <TweakSlider label="Título" value={tweaks.relNameSize} min={10} max={24} step={1} onChange={v => setTweak('relNameSize', v)} />
-            <TweakSlider label="Descripción" value={tweaks.relDescSize} min={8} max={18} step={1} onChange={v => setTweak('relDescSize', v)} />
-          </TweakSection>
-          <TweakSection label="Layout de las cards">
-            <TweakSlider label="Padding" value={tweaks.relPadding} min={4} max={32} step={1} onChange={v => setTweak('relPadding', v)} />
-          </TweakSection>
-          <TweakSection label="Tipografía">
-            <TweakSlider
-              label="Tamaño de fuente global"
-              value={tweaks.baseFontSize}
-              min={70} max={130} step={5}
-              onChange={v => setTweak('baseFontSize', v)}
-            />
-          </TweakSection>
-          <TweakSection label="Botón Personaliza">
-            <TweakColor
-              label="Color del botón"
-              value={tweaks.btnColor}
-              onChange={v => setTweak('btnColor', v)}
-            />
-            <TweakColor
-              label="Color del texto"
-              value={tweaks.btnTextColor}
-              onChange={v => setTweak('btnTextColor', v)}
-            />
-          </TweakSection>
-        </TweaksPanel>
-      );
-    }
-
-    ReactDOM.createRoot(document.getElementById('tweaks-root')).render(<ProductTweaks />);
-  </script>
 
 </body>
 </html>
