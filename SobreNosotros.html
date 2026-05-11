@@ -11,22 +11,10 @@
 </head>
 <body class="about-body">
   <div class="page-frame">
-    <header class="header about-header">
-      <div class="header-inner">
-        <a href="index.html" class="brand brand-link">
-          <img src="Paula's_Desserts/Limon.png" alt="" />
-          <span class="brand-title">Paula's Desserts</span>
-        </a>
+        
+    <div id="nav-placeholder"></div>
 
-        <nav class="menu">
-          <a href="Catalogo.html">MENÚ</a>
-          <a href="SobreNosotros.html">NOSOTROS</a>
-          <a href="index.html#contacto">CONTACTO</a>
-          <a href="Producto.html">PERSONALIZAR</a>
-        </nav>
-      </div>
-    </header>
-
+    <main>
     <section class="about-hero">
       <div class="about-hero-inner">
         <div class="about-col about-col-photo">
@@ -89,5 +77,13 @@
       </div>
     </footer>
   </div>
+  <script>
+    fetch('nav.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('nav-placeholder').innerHTML = data;
+      });
+  </script>
+  </main>
 </body>
 </html>

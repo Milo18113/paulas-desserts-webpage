@@ -133,7 +133,9 @@ main {
   justify-content: flex-end;
 }
 
-.menu a {
+/* Estilos para los enlaces normales y el botón del menú desplegable */
+.menu a, 
+.dropbtn {
   color: var(--primary-blue);
   text-decoration: none;
   font-size: clamp(0.72rem, 1.15vw, 0.95rem);
@@ -141,13 +143,66 @@ main {
   letter-spacing: 0.03em;
   display: inline-block;
   transition: transform 0.2s ease, text-shadow 0.2s ease;
+  
+  /* Reset default button styles para que se vea igual a los enlaces */
+  background: none;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0;
 }
 
-.menu a:hover {
+/* Efecto hover para enlaces normales y el botón principal */
+.menu a:hover, 
+.dropbtn:hover {
   transform: translateY(-3px) scale(1.08);
   text-shadow: 0 2px 6px rgba(28, 59, 128, 0.25);
 }
 
+/* --- ESTILOS DEL MENÚ DESPLEGABLE (DROPDOWN) --- */
+
+/* El contenedor invisible que envuelve el botón */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* La caja blanca del menú emergente (Oculta por defecto) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white; 
+  min-width: 150px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.15);
+  z-index: 10;
+  border-radius: 8px;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 0; 
+}
+
+/* Estilos para los enlaces ADENTRO de la cajita desplegable */
+.dropdown-content a {
+  color: var(--primary-blue);
+  padding: 12px 20px;
+  display: block; 
+  font-weight: 500; 
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* Efecto hover ADENTRO de la cajita (fondo gris, sin animación de salto) */
+.dropdown-content a:hover {
+  background-color: #f4f4f4; 
+  transform: none; 
+  text-shadow: none;
+}
+
+/* Mostrar la caja blanca cuando el mouse pasa por encima */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
 
 /* ==========================================================================
    HERO (BANNER PRINCIPAL)

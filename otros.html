@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paula's Desserts — Otros</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --cream: #F5EFE4; --navy: #1B2A5E; --gold: #B89C5A; --text: #2C2318; --text-muted: #7A6E62; --white: #FDFAF5; }
+  body { font-family: 'DM Sans', sans-serif; background-color: var(--cream); color: var(--text); min-height: 100vh; }
+  
+  .page-header { text-align: center; padding: 4rem 2rem 2.5rem; border-bottom: 1px solid rgba(27,42,94,0.1); margin-bottom: 3.5rem; }
+  .page-header .eyebrow { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+  .page-header h1 { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 600; color: var(--navy); margin-bottom: 0.75rem; }
+  .page-header p { color: var(--text-muted); font-size: 0.9rem; font-weight: 300; max-width: 420px; margin: 0 auto; line-height: 1.7; }
+  .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 2.5rem 2rem; max-width: 1100px; margin: 0 auto; padding: 0 3rem 6rem; }
+  .polaroid { background: var(--white); padding: 12px 12px 0; box-shadow: 0 2px 8px rgba(27,42,94,0.09), 0 1px 2px rgba(27,42,94,0.05); border-radius: 2px; transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: default; }
+  .polaroid:nth-child(odd)  { transform: rotate(-0.6deg); }
+  .polaroid:nth-child(even) { transform: rotate(0.5deg); }
+  .polaroid:hover { transform: rotate(0deg) translateY(-6px) scale(1.01) !important; box-shadow: 0 16px 40px rgba(27,42,94,0.16), 0 4px 10px rgba(27,42,94,0.08); z-index: 10; position: relative; }
+  .polaroid-photo { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
+  .polaroid-photo-placeholder { width: 100%; aspect-ratio: 1 / 1; background: #EDE4D5; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; }
+  .polaroid-body { padding: 1.1rem 0.5rem 1.5rem; }
+  .polaroid-body h3 { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 600; color: var(--navy); margin-bottom: 0.5rem; }
+  .polaroid-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.85rem; }
+  .tag { font-size: 0.68rem; font-weight: 400; color: var(--text-muted); background: rgba(27,42,94,0.06); padding: 2px 8px; border-radius: 20px; letter-spacing: 0.04em; }
+  .polaroid-desc { font-size: 0.8rem; color: var(--text-muted); font-weight: 300; line-height: 1.65; margin-bottom: 1rem; }
+  .polaroid-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 0.75rem; border-top: 1px solid rgba(27,42,94,0.08); }
+  .price { font-size: 1rem; font-weight: 500; color: var(--navy); }
+  .badge { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; }
+  .badge-popular { background: #FBF0DC; color: #9A7020; }
+  .badge-new     { background: #DFF0E8; color: #1A6644; }
+  .badge-custom  { background: #EDE4F5; color: #5C3A8A; }
+  footer { background: var(--navy); color: rgba(232,217,184,0.6); text-align: center; padding: 2rem; font-size: 0.78rem; font-family: 'Playfair Display', serif; font-style: italic; }
+  footer strong { color: #E8D9B8; font-style: normal; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; }
+</style>
+</head>
+<body>
+  <div class="page-frame">
+        
+    <div id="nav-placeholder"></div>
+
+<header class="page-header">
+  <p class="eyebrow">Paula's Desserts</p>
+  <h1>Otros</h1>
+  <p>Más allá del pastel. Descubre nuestras creaciones únicas para sorprender en cualquier momento.</p>
+</header>
+
+<main class="menu-grid">
+
+  <article class="polaroid">
+    <div class="polaroid-photo-placeholder">🥧</div>
+    <!-- <img class="polaroid-photo" src="img/pie-limon.jpg" alt="Mini Pie de Limón"> -->
+    <div class="polaroid-body">
+      <h3>Mini Pie de Limón</h3>
+      <div class="polaroid-tags">
+        <span class="tag">Masa quebrada</span>
+        <span class="tag">Lemon curd</span>
+        <span class="tag">Merengue</span>
+      </div>
+      <p class="polaroid-desc">Tartaleta individual de masa quebrada con lemon curd casero y merengue italiano tostado en la cima.</p>
+      <div class="polaroid-footer">
+        <span class="price">desde $12 / u</span>
+        <span class="badge badge-popular">Popular</span>
+      </div>
+    </div>
+  </article>
+
+  <article class="polaroid">
+    <div class="polaroid-photo-placeholder">🍫</div>
+    <div class="polaroid-body">
+      <h3>Brownie Fudge</h3>
+      <div class="polaroid-tags">
+        <span class="tag">Chocolate amargo</span>
+        <span class="tag">Nuez</span>
+        <span class="tag">Caramelo</span>
+      </div>
+      <p class="polaroid-desc">Denso, húmedo e intenso. Brownie con chocolate al 70% y vetas de caramelo salado. Servido tibio a pedido.</p>
+      <div class="polaroid-footer">
+        <span class="price">desde $5 / u</span>
+        <span class="badge badge-popular">Popular</span>
+      </div>
+    </div>
+  </article>
+
+  <article class="polaroid">
+    <div class="polaroid-photo-placeholder">🍓</div>
+    <div class="polaroid-body">
+      <h3>Cheesecake Individual</h3>
+      <div class="polaroid-tags">
+        <span class="tag">Base galleta</span>
+        <span class="tag">Cream cheese</span>
+        <span class="tag">Frutos rojos</span>
+      </div>
+      <p class="polaroid-desc">Cremoso y firme, sobre base de galleta de mantequilla. Con coulis de frutos rojos y frutos frescos de temporada.</p>
+      <div class="polaroid-footer">
+        <span class="price">desde $10 / u</span>
+        <span class="badge badge-new">Nuevo</span>
+      </div>
+    </div>
+  </article>
+
+  <article class="polaroid">
+    <div class="polaroid-photo-placeholder">🍬</div>
+    <div class="polaroid-body">
+      <h3>Trufas de Chocolate</h3>
+      <div class="polaroid-tags">
+        <span class="tag">Ganache</span>
+        <span class="tag">Cacao en polvo</span>
+        <span class="tag">Caja x6</span>
+      </div>
+      <p class="polaroid-desc">Trufas artesanales de ganache de chocolate con leche, rebozadas en cacao puro. Ideales como regalo o detalle.</p>
+      <div class="polaroid-footer">
+        <span class="price">desde $14 / 6u</span>
+        <span class="badge badge-custom">Regalo</span>
+      </div>
+    </div>
+  </article>
+
+</main>
+
+<footer>
+  <strong>Paula's Desserts</strong><br>
+  ¿Tienes un evento en mente? Hagámoslo realidad.
+</footer>
+<script>
+  fetch('nav.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('nav-placeholder').innerHTML = data;
+    });
+</script>
+</body>
+</html>
