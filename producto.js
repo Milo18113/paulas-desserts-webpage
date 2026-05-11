@@ -38,7 +38,7 @@ async function loadCatalogo() {
     catalogo = await loadCatalogo();
   } catch {
     mostrarError(
-      'No se pudo cargar el catálogo. En Producto.html, antes de producto.js, incluye un script con src "catalogo.embed.js" (archivo generado desde catalogo.json). También puedes servir la carpeta con un servidor local, por ejemplo: npx serve .'
+      'No se pudo cargar el catálogo. Asegúrate de que en <code>Producto.html</code> va <strong>antes</strong> de <code>producto.js</code> la línea: <code>&lt;script src=&quot;catalogo.embed.js&quot;&gt;&lt;/script&gt;</code> (archivo generado desde <code>catalogo.json</code>). O abre el sitio con un servidor, por ejemplo <code>npx serve .</code>'
     );
     return;
   }
@@ -53,7 +53,7 @@ async function loadCatalogo() {
 
   const producto = catalogo.find((p) => p.id === id);
   if (!producto) {
-    mostrarError(`No encontramos el producto «${id}». Usa los enlaces de abajo para ver el listado.`);
+    mostrarError(`No encontramos el producto «${escapeHtml(id)}». <a href="Producto.html">Ver listado</a>`);
     return;
   }
 
@@ -157,7 +157,7 @@ function poblarPagina(producto, catalogo) {
       ? producto.alergenos.map((a) => `<li>${escapeHtml(a)}</li>`).join('')
       : '<li>Sin alérgenos declarados en ficha</li>';
 
-  renderTallas(producto.tallas, producto);
+  renderTallas(producto.tallas);
   renderOpcionesExtra(producto);
 
   const btnScroll = document.getElementById('btn-personalizar-scroll');
@@ -203,14 +203,6 @@ function escapeHtml(s) {
     .replace(/"/g, '&quot;');
 }
 
-/** Texto plano seguro para mensajes (WhatsApp, portapapeles); evita ángulos y caracteres de control. */
-function sanitizePlainText(s) {
-  return String(s ?? '')
-    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
-    .replace(/</g, '')
-    .replace(/>/g, '');
-}
-
 function getCantidad() {
   const el = document.getElementById('product-cantidad');
   const n = parseInt(el && el.value, 10);
@@ -218,18 +210,14 @@ function getCantidad() {
   return Math.min(99, n);
 }
 
-function renderTallas(tallas, producto) {
+function renderTallas(tallas) {
   const contenedor = document.getElementById('product-tallas');
   const precioEl = document.getElementById('product-price');
   const noteEl = document.getElementById('product-price-note');
 
   const tallasCopy = tallas && tallas.length ? tallas : null;
 
-  const setSelectedTalla = (index) => {
-    if (!tallasCopy || !tallasCopy.length || !contenedor) return;
-    const max = tallasCopy.length - 1;
-    const idx = Math.min(max, Math.max(0, Number(index) || 0));
-    const talla = tallasCopy[idx];
+  const setSelectedTalla = (talla, index) => {
     state.selectedTalla = talla;
     precioEl.textContent =
       talla.precio !== null && talla.precio !== undefined
@@ -242,12 +230,11 @@ function renderTallas(tallas, producto) {
           : 'Según el tamaño elegido.';
     }
     contenedor.querySelectorAll('.size-card').forEach((c, j) => {
-      const selected = j === idx;
-      c.classList.toggle('selected', selected);
-      c.setAttribute('aria-checked', selected ? 'true' : 'false');
-      c.tabIndex = selected ? 0 : -1;
+      c.classList.toggle('selected', j === index);
+      c.setAttribute('aria-checked', j === index ? 'true' : 'false');
+      c.tabIndex = j === index ? 0 : -1;
     });
-    if (producto) updatePersonalizacionResumen(producto);
+    updatePersonalizacionResumen(state.producto);
   };
 
   if (!tallasCopy) {
@@ -270,13 +257,13 @@ function renderTallas(tallas, producto) {
     )
     .join('');
 
-  setSelectedTalla(0);
+  setSelectedTalla(tallasCopy[0], 0);
 
   contenedor.onclick = (e) => {
     const card = e.target.closest('.size-card');
     if (!card) return;
     const idx = Number(card.dataset.index);
-    setSelectedTalla(Number.isFinite(idx) ? idx : 0);
+    setSelectedTalla(tallasCopy[idx], idx);
   };
 
   contenedor.onkeydown = (e) => {
@@ -285,19 +272,19 @@ function renderTallas(tallas, producto) {
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
       e.preventDefault();
       const next = Math.min(cards.length - 1, current + 1);
-      setSelectedTalla(next);
+      setSelectedTalla(tallasCopy[next], next);
       cards[next]?.focus();
     } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
       e.preventDefault();
       const prev = Math.max(0, current - 1);
-      setSelectedTalla(prev);
+      setSelectedTalla(tallasCopy[prev], prev);
       cards[prev]?.focus();
     } else if (e.key === 'Enter' || e.key === ' ') {
       const card = e.target.closest('.size-card');
       if (card) {
         e.preventDefault();
         const idx = Number(card.dataset.index);
-        setSelectedTalla(Number.isFinite(idx) ? idx : 0);
+        setSelectedTalla(tallasCopy[idx], idx);
       }
     }
   };
@@ -427,24 +414,18 @@ function buildMensajePedido(producto) {
       ? `$${Number(state.selectedTalla.precio).toFixed(2)} c/u`
       : 'A consultar';
 
-  const opcionTexto = sanitizePlainText(
-    state.selectedOpcion ? state.selectedOpcion.label : 'Sin variante'
-  );
-  const notasRaw = (document.getElementById('product-notas')?.value || '').trim();
-  const notas = sanitizePlainText(notasRaw);
+  const opcionTexto = state.selectedOpcion ? state.selectedOpcion.label : 'Sin variante';
+  const notas = (document.getElementById('product-notas')?.value || '').trim();
   const notasLine = notas ? `\n- Notas: ${notas}` : '';
 
   const tallaLine = state.selectedTalla
-    ? `${sanitizePlainText(state.selectedTalla.label)} (${precio})`
+    ? `${state.selectedTalla.label} (${precio})`
     : 'A definir';
-
-  const nombreProd = sanitizePlainText(producto.nombre);
-  const catProd = sanitizePlainText(producto.categoria);
 
   return [
     "Hola Paula's Desserts!",
     'Quiero pedir / personalizar:',
-    `- Producto: ${nombreProd} (${catProd})`,
+    `- Producto: ${producto.nombre} (${producto.categoria})`,
     `- Cantidad: ${cantidad}`,
     `- Tamaño / presentación: ${tallaLine}`,
     `- Opción (sabor / estilo): ${opcionTexto}`,
@@ -551,11 +532,9 @@ function mostrarError(msg) {
   if (!hero) return;
   hero.innerHTML = `
     <div class="product-error" style="grid-column:1/-1;text-align:center;padding:60px 20px;">
-      <p class="product-error-msg" style="font-size:17px;color:var(--color-primary);opacity:0.9;font-family:var(--font-body);max-width:46ch;margin:0 auto 20px;line-height:1.55;"></p>
+      <p style="font-size:17px;color:var(--color-primary);opacity:0.9;font-family:var(--font-body);max-width:46ch;margin:0 auto 20px;line-height:1.55;">${msg}</p>
       <p style="margin:0 0 12px;"><a href="Menu.html" style="color:var(--color-primary);font-size:15px;font-weight:700;font-family:var(--font-body);">← Volver al menú</a></p>
       <p style="margin:0;"><a href="Producto.html" style="color:var(--color-primary);font-size:14px;font-weight:600;font-family:var(--font-body);">Ver todos los productos</a></p>
     </div>
   `;
-  const msgEl = hero.querySelector('.product-error-msg');
-  if (msgEl) msgEl.textContent = msg;
 }
