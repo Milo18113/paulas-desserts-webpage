@@ -45,9 +45,29 @@
 </style>
 </head>
 <body>
-  <div class="page-frame">
-        
-    <div id="nav-placeholder"></div>
+
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="brand brand-link">
+        <img src="Paula's_Desserts/Limon.png" alt="Logo Paula's Desserts" />
+        <span class="brand-title">Paula's Desserts</span>
+      </a>
+      <nav class="menu">
+        <div class="dropdown">
+          <button type="button" class="dropbtn" aria-haspopup="true" aria-expanded="false">MENÚ</button>
+          <div class="dropdown-content">
+            <a href="pasteles.html">Pasteles</a>
+            <a href="cupcakes.html">Cupcakes</a>
+            <a href="galletas.html">Galletas</a>
+            <a href="otros.html">Otros</a>
+          </div>
+        </div>
+        <a href="SobreNosotros.html">NOSOTROS</a>
+        <a href="index.html#contacto">CONTACTO</a>
+        <a href="Producto.html">PERSONALIZAR</a>
+      </nav>
+    </div>
+  </header>
 
 <header class="page-header">
   <p class="eyebrow">Paula's Desserts</p>
@@ -128,12 +148,5 @@
   <strong>Paula's Desserts</strong><br>
   ¿Tienes un evento en mente? Hagámoslo realidad.
 </footer>
-<script>
-  fetch('nav.html')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('nav-placeholder').innerHTML = data;
-    });
-</script>
 </body>
 </html>

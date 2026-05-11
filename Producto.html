@@ -12,13 +12,6 @@
 </head>
 <body>
 
-<<<<<<< HEAD
-  <div class="page-frame">
-        
-    <div id="nav-placeholder"></div>
-  </div>
-=======
-  <!-- HEADER -->
   <header class="header">
     <div class="header-inner">
       <a href="index.html" class="brand brand-link">
@@ -27,14 +20,21 @@
       </a>
 
       <nav class="menu">
-        <a href="Menu.html">Menú</a>
-        <a href="SobreNosotros.html">Nosotros</a>
-        <a href="index.html#contacto">Contacto</a>
-        <a href="Producto.html">Personalizar</a>
+        <div class="dropdown">
+          <button type="button" class="dropbtn" aria-haspopup="true" aria-expanded="false">MENÚ</button>
+          <div class="dropdown-content">
+            <a href="pasteles.html">Pasteles</a>
+            <a href="cupcakes.html">Cupcakes</a>
+            <a href="galletas.html">Galletas</a>
+            <a href="otros.html">Otros</a>
+          </div>
+        </div>
+        <a href="SobreNosotros.html">NOSOTROS</a>
+        <a href="index.html#contacto">CONTACTO</a>
+        <a href="Producto.html">PERSONALIZAR</a>
       </nav>
     </div>
   </header>
->>>>>>> 8696ab267f38c7c366f39c17cf32fc13d1a9c853
 
   <!-- BREADCRUMB -->
   <nav class="breadcrumb">
@@ -156,14 +156,6 @@
       <span class="about-footer-dash"></span>
     </div>
   </footer>
-
-  <script>
-    fetch('nav.html')
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById('nav-placeholder').innerHTML = data;
-      });
-  </script>
 
   <!-- Carga los datos del producto desde catalogo.json usando el ?id= de la URL -->
   <script src="producto.js" defer></script>
