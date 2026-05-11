@@ -51,9 +51,6 @@
         <img id="product-img" class="product-img-el" src="" alt="" />
         <span id="product-img-placeholder" class="product-img-placeholder">Cargando imagen…</span>
       </div>
-      <button type="button" class="btn-personalizar" id="btn-personalizar-scroll">
-        Ir a personalizar
-      </button>
     </div>
 
     <div class="product-info">
@@ -73,30 +70,128 @@
       <hr class="divider" />
 
       <section id="product-personalizacion" class="product-custom-panel" aria-labelledby="personalizacion-titulo">
-        <h2 id="personalizacion-titulo" class="custom-title">Personaliza tu pedido</h2>
-        <p class="custom-hint">
-          Elige la opción de sabor o estilo, el tamaño y la cantidad. Añade notas si quieres un mensaje en la torta, colores o fecha de entrega. Luego copia el resumen o envíalo por WhatsApp.
+        <h2 id="personalizacion-titulo" class="custom-title custom-title--upper">PERSONALIZA TU PEDIDO</h2>
+        <p class="custom-hint custom-hint--compact">
+          Completa lo que ya tengas claro; cada bloque se <strong>cierra solo</strong> al contestar para acortar la página. Volvé a abrirlo con un clic en el título. Al final <strong>copia el texto</strong> o úsalo en <strong>WhatsApp</strong>.
         </p>
 
-        <div id="product-opciones-wrap" class="custom-section custom-section--chips is-hidden">
-          <p class="custom-row-label" id="opciones-label">Sabor / estilo</p>
-          <div id="product-opciones" class="option-chips" role="group" aria-labelledby="opciones-label"></div>
+        <div class="form-strip">
+          <p class="form-block-title">Tipo de producto</p>
+          <p id="product-tipo-line" class="form-readonly" aria-live="polite"></p>
+          <div class="form-strip-qty">
+            <label for="product-cantidad" class="form-strip-qty-label">Unidades</label>
+            <input
+              type="number"
+              id="product-cantidad"
+              class="product-cantidad-input"
+              min="1"
+              max="99"
+              value="1"
+              inputmode="numeric"
+              aria-describedby="product-cantidad-hint"
+            />
+            <p id="product-cantidad-hint" class="custom-microhint custom-microhint--tight form-strip-qty-hint">
+              Ej.: 1 torta, 2 cajas de cupcakes.
+            </p>
+          </div>
         </div>
 
-        <div class="custom-section">
-          <h3 class="custom-title custom-title--sub">Elige el tamaño</h3>
-          <div class="size-options" id="product-tallas" role="radiogroup" aria-label="Tamaño del producto"></div>
-        </div>
+        <details class="form-accordion" data-acc="talla" open>
+          <summary class="form-accordion-summary">
+            <span class="form-accordion-title">Cantidad / tamaño (porciones)</span>
+            <span class="form-accordion-preview" id="acc-preview-talla"></span>
+          </summary>
+          <div class="form-accordion-body">
+            <p class="custom-microhint">Guía de porciones ≈ personas. El precio depende del tamaño elegido.</p>
+            <div class="size-options" id="product-tallas" role="radiogroup" aria-label="Tamaño o porciones"></div>
+          </div>
+        </details>
 
-        <div class="custom-section">
-          <label class="notas-label" for="product-cantidad">Cantidad</label>
-          <input type="number" id="product-cantidad" class="product-cantidad-input" min="1" max="99" value="1" inputmode="numeric" />
-        </div>
+        <details class="form-accordion" data-acc="sabor" open>
+          <summary class="form-accordion-summary">
+            <span class="form-accordion-title">Sabor</span>
+            <span class="form-accordion-preview" id="acc-preview-sabor"></span>
+          </summary>
+          <div class="form-accordion-body">
+            <p class="custom-microhint custom-microhint--tight">Opciones generales; si no aplica, elige «Otro» y detalla abajo.</p>
+            <div id="product-sabores" class="option-chips" role="radiogroup" aria-label="Sabor"></div>
+          </div>
+        </details>
 
-        <div class="custom-section">
-          <label class="notas-label" for="product-notas">Notas para Paula <span class="optional">(opcional)</span></label>
-          <textarea id="product-notas" class="product-notas" rows="4" maxlength="500" placeholder="Ej.: colores pastel, texto «Felices 15», entrega sábado 14:00, sin nueces…"></textarea>
-        </div>
+        <details class="form-accordion" data-acc="tema" open>
+          <summary class="form-accordion-summary">
+            <span class="form-accordion-title">Tema o diseño</span>
+            <span class="form-accordion-preview" id="acc-preview-tema"></span>
+          </summary>
+          <div class="form-accordion-body">
+            <textarea id="field-tema" class="product-field-text" rows="3" maxlength="500" placeholder="Ej.: unicornios, minimalista, floral, infantil…"></textarea>
+          </div>
+        </details>
+
+        <details class="form-accordion" data-acc="colores" open>
+          <summary class="form-accordion-summary">
+            <span class="form-accordion-title">Colores</span>
+            <span class="form-accordion-preview" id="acc-preview-colores"></span>
+          </summary>
+          <div class="form-accordion-body">
+            <input id="field-colores" class="product-field-input" type="text" maxlength="200" placeholder="Ej.: rosa pastel, blanco y dorado…" />
+          </div>
+        </details>
+
+        <details class="form-accordion" data-acc="texto" open>
+          <summary class="form-accordion-summary">
+            <span class="form-accordion-title">Texto personalizado</span>
+            <span class="form-accordion-preview" id="acc-preview-texto"></span>
+          </summary>
+          <div class="form-accordion-body">
+            <input id="field-texto" class="product-field-input" type="text" maxlength="150" placeholder="Texto en la torta o detalle escrito (ej.: Felices 15 Ana)" />
+          </div>
+        </details>
+
+        <details class="form-accordion" data-acc="entrega" open>
+          <summary class="form-accordion-summary">
+            <span class="form-accordion-title">Delivery / retiro</span>
+            <span class="form-accordion-preview" id="acc-preview-entrega"></span>
+          </summary>
+          <div class="form-accordion-body">
+            <select id="field-entrega" class="product-field-select">
+              <option value="retiro">Retiro en local</option>
+              <option value="delivery">Delivery</option>
+              <option value="coord">A coordinar</option>
+            </select>
+          </div>
+        </details>
+
+        <details class="form-accordion" data-acc="diet" open>
+          <summary class="form-accordion-summary">
+            <span class="form-accordion-title">Preferencias dietéticas</span>
+            <span class="form-accordion-preview" id="acc-preview-diet"></span>
+          </summary>
+          <div class="form-accordion-body">
+            <p class="custom-microhint custom-microhint--tight">Podés marcar varias. Se aplican a este pedido.</p>
+            <div id="diet-chips" class="option-chips option-chips--multi" role="group" aria-label="Preferencias dietéticas"></div>
+          </div>
+        </details>
+
+        <details class="form-accordion" data-acc="envase" open id="product-envase-block">
+          <summary class="form-accordion-summary">
+            <span class="form-accordion-title">Empaque / presentación</span>
+            <span class="form-accordion-preview" id="acc-preview-envase"></span>
+          </summary>
+          <div class="form-accordion-body">
+            <div id="product-envases" class="option-chips" role="radiogroup" aria-label="Empaque"></div>
+          </div>
+        </details>
+
+        <details class="form-accordion" data-acc="notas" open>
+          <summary class="form-accordion-summary">
+            <span class="form-accordion-title">Extras u otras notas</span>
+            <span class="form-accordion-preview" id="acc-preview-notas"></span>
+          </summary>
+          <div class="form-accordion-body">
+            <textarea id="field-notas-extra" class="product-field-text" rows="2" maxlength="400" placeholder="Cualquier otro detalle…"></textarea>
+          </div>
+        </details>
 
         <p id="product-personalizacion-resumen" class="product-personalizacion-resumen" aria-live="polite"></p>
 
