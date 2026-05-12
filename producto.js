@@ -69,64 +69,19 @@ async function loadCatalogo() {
   const id = params.get('id');
 
   if (!id) {
-    mostrarSelectorProductos(catalogo);
+    window.location.replace('menu_personalizacion.html');
     return;
   }
 
   const producto = catalogo.find((p) => p.id === id);
   if (!producto) {
-    mostrarError(`No encontramos el producto «${escapeHtml(id)}». <a href="Producto.html">Ver listado</a>`);
+    mostrarError(`No encontramos el producto «${escapeHtml(id)}». <a href="menu_personalizacion.html">Ver listado</a>`);
     return;
   }
 
   poblarPagina(producto, catalogo);
 })();
 
-function mostrarSelectorProductos(catalogo) {
-  document.title = "Personalizar — Paula's Desserts";
-
-  const breadcrumb = document.getElementById('breadcrumb-nav');
-  if (breadcrumb) {
-    breadcrumb.innerHTML =
-      '<span class="breadcrumb-current">Personalización</span>';
-  }
-
-  const related = document.getElementById('related-section');
-  if (related) related.hidden = true;
-
-  const hero = document.getElementById('product-hero');
-  if (!hero) return;
-
-  hero.innerHTML = `
-    <div class="product-picker">
-      <h2 class="product-picker-title">¿Qué quieres personalizar?</h2>
-      <p class="product-picker-lead">
-        Elige un producto y completa el formulario. Luego copia el pedido o envíalo por WhatsApp.
-      </p>
-      <div class="product-picker-grid">
-        ${catalogo
-          .map((p) => {
-            const desc = escapeHtml(
-              ((p.descripcion || '').split('.')[0] || p.categoria || '').trim().slice(0, 100)
-            );
-            const img = p.image
-              ? `<img src="${escapeHtml(p.image)}" alt="" loading="lazy" width="320" height="240" />`
-              : `<div class="product-picker-noimg" aria-hidden="true">Sin foto</div>`;
-            return `
-          <a class="product-picker-card" href="Producto.html?id=${encodeURIComponent(p.id)}">
-            <div class="product-picker-img-wrap">${img}</div>
-            <div class="product-picker-body">
-              <span class="product-picker-cat">${escapeHtml(p.categoria)}</span>
-              <span class="product-picker-name">${escapeHtml(p.nombre)}</span>
-              <span class="product-picker-desc">${desc}</span>
-            </div>
-          </a>`;
-          })
-          .join('')}
-      </div>
-    </div>
-  `;
-}
 
 function poblarPagina(producto, catalogo) {
   state.producto = producto;
@@ -137,7 +92,6 @@ function poblarPagina(producto, catalogo) {
   const related = document.getElementById('related-section');
   if (related) related.hidden = false;
 
-  document.getElementById('breadcrumb-categoria').textContent = producto.categoria;
   document.getElementById('breadcrumb-nombre').textContent = producto.nombre;
 
   const img = document.getElementById('product-img');
