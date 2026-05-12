@@ -53,7 +53,7 @@
     "nombre": "Brownie Cake",
     "categoria": "Brownies",
     "descripcion": "Fudge brownie con ganache de chocolate.",
-    "image": null,
+    "image": "assets/productos/browniecake.jpg",
     "alergenos": ["Gluten", "Lácteos"],
     "tallas": [
       { "label": "Único", "desc": "10 porciones", "precio": 18 }
