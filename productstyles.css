@@ -352,6 +352,16 @@ body.product-page .dropbtn {
   max-width: 52ch;
 }
 
+/* Sección de formulario plana (sin acordeón) */
+.form-section {
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(var(--primary-blue-rgb), 0.12);
+}
+
+.form-section:last-of-type {
+  border-bottom: none;
+}
+
 /* Tipo de producto (compacto, sin acordeón) */
 .form-strip {
   margin: 0;
@@ -403,7 +413,7 @@ body.product-page .dropbtn {
   align-items: baseline;
   justify-content: space-between;
   gap: 8px 16px;
-  padding: 14px 0 12px;
+  padding: 0 0 12px;
   font-family: var(--font-body);
 }
 
@@ -421,6 +431,23 @@ body.product-page .dropbtn {
   border-radius: 2px;
 }
 
+.form-accordion-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.form-accordion-chevron {
+  color: var(--color-text);
+  flex-shrink: 0;
+  transform: rotate(-90deg);
+  transition: transform 0.22s ease;
+}
+
+details[open] > summary .form-accordion-chevron {
+  transform: rotate(0deg);
+}
+
 .form-accordion-title {
   font-size: 11px;
   font-weight: 700;
@@ -435,7 +462,7 @@ body.product-page .dropbtn {
   font-weight: 600;
   letter-spacing: 0.02em;
   text-transform: none;
-  color: var(--color-text);
+  color: var(--color-secondary);
   opacity: 0.78;
   max-width: min(100%, 260px);
   text-align: right;
@@ -448,7 +475,8 @@ body.product-page .dropbtn {
 }
 
 .form-accordion-body {
-  padding: 0 0 16px;
+  overflow: hidden;
+  padding: 0 0 26px;
 }
 
 .form-accordion:not([open]) .form-accordion-summary {
@@ -646,13 +674,22 @@ body.product-page .dropbtn {
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  padding-top: 4px;
+  padding: 14px 0;
 }
 
 .price-block {
   display: flex;
   flex-direction: column;
   gap: 2px;
+}
+
+.price-label {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  color: var(--color-secondary);
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .price {
@@ -786,14 +823,95 @@ body.product-page .dropbtn {
 
 .related-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 260px));
+  justify-content: center;
   gap: 16px;
 }
 
 .related .polaroid {
+  background: var(--color-white);
+  padding: 12px 12px 0;
+  box-shadow: 0 2px 8px rgba(27,42,94,0.09), 0 1px 2px rgba(27,42,94,0.05);
+  border-radius: 2px;
   cursor: pointer;
   text-decoration: none;
   color: inherit;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.related .polaroid:nth-child(odd)  { transform: rotate(-0.6deg); }
+.related .polaroid:nth-child(even) { transform: rotate(0.5deg); }
+
+.related .polaroid:hover {
+  transform: rotate(0deg) translateY(-6px) scale(1.01) !important;
+  box-shadow: 0 16px 40px rgba(27,42,94,0.16), 0 4px 10px rgba(27,42,94,0.08);
+  z-index: 10;
+  position: relative;
+}
+
+.related .polaroid-photo {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
+.related .polaroid-photo-placeholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #EDE4D5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+}
+
+.related .polaroid-body {
+  padding: 1.1rem 0.5rem 1.5rem;
+}
+
+.related .polaroid-body h3 {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.related .polaroid-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.85rem;
+}
+
+.related .tag {
+  font-size: 0.68rem;
+  color: var(--color-text);
+  background: rgba(var(--primary-blue-rgb), 0.06);
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+}
+
+.related .polaroid-desc {
+  font-size: 0.8rem;
+  color: var(--color-text);
+  opacity: 0.72;
+  line-height: 1.65;
+  margin-bottom: 1rem;
+}
+
+.related .polaroid-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(var(--primary-blue-rgb), 0.08);
+}
+
+.related .price {
+  font-size: 1rem;
+  color: var(--color-primary);
 }
 
 /* --------------------------------------------------------------------------
@@ -815,6 +933,7 @@ body.product-page .dropbtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   padding: 14px 22px;
   background: #25d366;
   color: #fff !important;
@@ -879,11 +998,12 @@ body.product-page .dropbtn {
   text-align: center;
   max-width: 52ch;
   margin: 0 auto 28px;
+  padding: 20px;
 }
 
 .product-picker-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
 }
 

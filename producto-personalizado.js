@@ -6,7 +6,7 @@
 const WHATSAPP_NUM = '593980191040';
 
 const SABORES_OPCIONES = [
-  { label: 'Clásico (según producto)', value: 'clasico' },
+  { label: 'Clásico', value: 'clasico' },
   { label: 'Chocolate', value: 'chocolate' },
   { label: 'Vainilla', value: 'vainilla' },
   { label: 'Red velvet', value: 'red-velvet' },
@@ -143,6 +143,7 @@ function poblarPagina(producto) {
   }
 
   updatePersonalizacionResumen(producto);
+  initAccordionAnimations();
 }
 
 function escapeHtml(s) {
@@ -193,11 +194,32 @@ function setAccordionPreviewText(id, text) {
   if (el) el.textContent = text;
 }
 
+function animateCloseDetails(det) {
+  if (!det || !det.open || det.dataset.animating) return;
+  const body = det.querySelector('.form-accordion-body');
+  if (!body) { det.open = false; return; }
+  det.dataset.animating = '1';
+  const startH = body.scrollHeight;
+  body.style.height = startH + 'px';
+  body.style.paddingBottom = '0';
+  requestAnimationFrame(() => {
+    body.style.transition = 'height 0.32s ease';
+    body.style.height = '0';
+  });
+  body.addEventListener('transitionend', () => {
+    det.removeAttribute('open');
+    body.style.height = '';
+    body.style.transition = '';
+    body.style.paddingBottom = '';
+    delete det.dataset.animating;
+  }, { once: true });
+}
+
 function scheduleCloseDetails(det) {
   if (!det || typeof det.matches !== 'function' || !det.matches('details.form-accordion')) return;
   clearTimeout(det._accCloseT);
   det._accCloseT = setTimeout(() => {
-    det.open = false;
+    animateCloseDetails(det);
   }, 420);
 }
 
@@ -569,6 +591,41 @@ function updatePersonalizacionResumen(producto) {
   if (wa) {
     wa.href = `https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(buildMensajePedido(producto))}`;
   }
+}
+
+// ===== ANIMACIONES DE ACORDEONES =====
+
+function initAccordionAnimations() {
+  document.querySelectorAll('.form-accordion').forEach((det) => {
+    const body = det.querySelector('.form-accordion-body');
+    if (!body) return;
+
+    det.querySelector('summary').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (det.dataset.animating) return;
+
+      if (det.open) {
+        animateCloseDetails(det);
+      } else {
+        det.dataset.animating = '1';
+        // Abrir: sin padding todavía, medir, animar, restaurar padding al final
+        body.style.paddingBottom = '0';
+        det.setAttribute('open', '');
+        const endH = body.scrollHeight;
+        body.style.height = '0';
+        requestAnimationFrame(() => {
+          body.style.transition = 'height 0.32s ease';
+          body.style.height = endH + 26 + 'px';
+        });
+        body.addEventListener('transitionend', () => {
+          body.style.height = '';
+          body.style.transition = '';
+          body.style.paddingBottom = '';
+          delete det.dataset.animating;
+        }, { once: true });
+      }
+    });
+  });
 }
 
 async function guardarPersonalizacion(producto) {

@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet" />
+  <link rel="icon" href="Paula's_Desserts/LogoBeige.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="productstyles.css" />
 </head>
@@ -63,19 +65,15 @@
       <div class="tab-block">
         <h3 class="contains-title">Contiene (alérgenos e información)</h3>
         <ul class="lorem-list" id="product-alergenos"></ul>
+        <br>
+        <p class="product-tagline">Los ingredientes se pueden modificar a continuación.</p>
       </div>
 
       <hr class="divider" />
 
       <section id="product-personalizacion" class="product-custom-panel" aria-labelledby="personalizacion-titulo">
         <h2 id="personalizacion-titulo" class="custom-title custom-title--upper">PERSONALIZA TU PEDIDO</h2>
-        <p class="custom-hint custom-hint--compact">
-          Completa lo que ya tengas claro; cada bloque se <strong>cierra solo</strong> al contestar para acortar la página. Volvé a abrirlo con un clic en el título. Al final <strong>copia el texto</strong> o úsalo en <strong>WhatsApp</strong>.
-        </p>
-
         <div class="form-strip">
-          <p class="form-block-title">Tipo de producto</p>
-          <p id="product-tipo-line" class="form-readonly" aria-live="polite"></p>
           <div class="form-strip-qty">
             <label for="product-cantidad" class="form-strip-qty-label">Unidades</label>
             <input
@@ -96,29 +94,36 @@
 
         <details class="form-accordion" data-acc="talla" open>
           <summary class="form-accordion-summary">
-            <span class="form-accordion-title">Cantidad / tamaño (porciones)</span>
+            <span class="form-accordion-label">
+              <svg class="form-accordion-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 6 8 10 12 6"/></svg>
+              <span class="form-accordion-title">Cantidad / tamaño (porciones)</span>
+            </span>
             <span class="form-accordion-preview" id="acc-preview-talla"></span>
           </summary>
           <div class="form-accordion-body">
-            <p class="custom-microhint">Guía de porciones ≈ personas. El precio depende del tamaño elegido.</p>
             <div class="size-options" id="product-tallas" role="radiogroup" aria-label="Tamaño o porciones"></div>
           </div>
         </details>
 
         <details class="form-accordion" data-acc="sabor" open>
           <summary class="form-accordion-summary">
-            <span class="form-accordion-title">Sabor</span>
+            <span class="form-accordion-label">
+              <svg class="form-accordion-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 6 8 10 12 6"/></svg>
+              <span class="form-accordion-title">Sabor</span>
+            </span>
             <span class="form-accordion-preview" id="acc-preview-sabor"></span>
           </summary>
           <div class="form-accordion-body">
-            <p class="custom-microhint custom-microhint--tight">Opciones generales; si no aplica, elige «Otro» y detalla abajo.</p>
             <div id="product-sabores" class="option-chips" role="radiogroup" aria-label="Sabor"></div>
           </div>
         </details>
 
         <details class="form-accordion" data-acc="tema" open>
           <summary class="form-accordion-summary">
-            <span class="form-accordion-title">Tema o diseño</span>
+            <span class="form-accordion-label">
+              <svg class="form-accordion-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 6 8 10 12 6"/></svg>
+              <span class="form-accordion-title">Tema o diseño</span>
+            </span>
             <span class="form-accordion-preview" id="acc-preview-tema"></span>
           </summary>
           <div class="form-accordion-body">
@@ -128,7 +133,10 @@
 
         <details class="form-accordion" data-acc="colores" open>
           <summary class="form-accordion-summary">
-            <span class="form-accordion-title">Colores</span>
+            <span class="form-accordion-label">
+              <svg class="form-accordion-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 6 8 10 12 6"/></svg>
+              <span class="form-accordion-title">Colores</span>
+            </span>
             <span class="form-accordion-preview" id="acc-preview-colores"></span>
           </summary>
           <div class="form-accordion-body">
@@ -138,7 +146,10 @@
 
         <details class="form-accordion" data-acc="texto" open>
           <summary class="form-accordion-summary">
-            <span class="form-accordion-title">Texto personalizado</span>
+            <span class="form-accordion-label">
+              <svg class="form-accordion-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 6 8 10 12 6"/></svg>
+              <span class="form-accordion-title">Texto personalizado</span>
+            </span>
             <span class="form-accordion-preview" id="acc-preview-texto"></span>
           </summary>
           <div class="form-accordion-body">
@@ -148,7 +159,10 @@
 
         <details class="form-accordion" data-acc="entrega" open>
           <summary class="form-accordion-summary">
-            <span class="form-accordion-title">Delivery / retiro</span>
+            <span class="form-accordion-label">
+              <svg class="form-accordion-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 6 8 10 12 6"/></svg>
+              <span class="form-accordion-title">Delivery / retiro</span>
+            </span>
             <span class="form-accordion-preview" id="acc-preview-entrega"></span>
           </summary>
           <div class="form-accordion-body">
@@ -162,18 +176,23 @@
 
         <details class="form-accordion" data-acc="diet" open>
           <summary class="form-accordion-summary">
-            <span class="form-accordion-title">Preferencias dietéticas</span>
+            <span class="form-accordion-label">
+              <svg class="form-accordion-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 6 8 10 12 6"/></svg>
+              <span class="form-accordion-title">Preferencias dietéticas</span>
+            </span>
             <span class="form-accordion-preview" id="acc-preview-diet"></span>
           </summary>
           <div class="form-accordion-body">
-            <p class="custom-microhint custom-microhint--tight">Podés marcar varias. Se aplican a este pedido.</p>
             <div id="diet-chips" class="option-chips option-chips--multi" role="group" aria-label="Preferencias dietéticas"></div>
           </div>
         </details>
 
         <details class="form-accordion" data-acc="envase" open id="product-envase-block">
           <summary class="form-accordion-summary">
-            <span class="form-accordion-title">Empaque / presentación</span>
+            <span class="form-accordion-label">
+              <svg class="form-accordion-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 6 8 10 12 6"/></svg>
+              <span class="form-accordion-title">Empaque / presentación</span>
+            </span>
             <span class="form-accordion-preview" id="acc-preview-envase"></span>
           </summary>
           <div class="form-accordion-body">
@@ -183,7 +202,10 @@
 
         <details class="form-accordion" data-acc="notas" open>
           <summary class="form-accordion-summary">
-            <span class="form-accordion-title">Extras u otras notas</span>
+            <span class="form-accordion-label">
+              <svg class="form-accordion-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 6 8 10 12 6"/></svg>
+              <span class="form-accordion-title">Extras u otras notas</span>
+            </span>
             <span class="form-accordion-preview" id="acc-preview-notas"></span>
           </summary>
           <div class="form-accordion-body">
@@ -195,12 +217,12 @@
 
         <div class="cta-row">
           <div class="price-block">
+            <p class="form-block-title">Total</p>
             <div class="price" id="product-price">—</div>
-            <p id="product-price-note" class="price-note"></p>
           </div>
           <div class="cta-buttons">
             <button type="button" class="btn-primary" id="btn-guardar">Copiar pedido</button>
-            <a class="btn-whatsapp" id="btn-whatsapp" href="#" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a class="btn-whatsapp" id="btn-whatsapp" href="#" target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"></i>Enviar pedido</a>
           </div>
         </div>
       </section>
