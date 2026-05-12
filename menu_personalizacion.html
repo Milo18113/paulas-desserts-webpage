@@ -63,17 +63,17 @@
       return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    fetch('catalogo.json')
+    fetch('productos-base.json')
       .then(r => { if (!r.ok) throw new Error(); return r.json(); })
-      .then(catalogo => {
+      .then(bases => {
         const grid = document.getElementById('picker-grid');
-        grid.innerHTML = catalogo.map(p => {
+        grid.innerHTML = bases.map(p => {
           const desc = escapeHtml(((p.descripcion || '').split('.')[0] || p.categoria || '').trim().slice(0, 100));
           const img = p.image
             ? `<img src="${escapeHtml(p.image)}" alt="" loading="lazy" width="320" height="240" />`
             : `<div class="product-picker-noimg" aria-hidden="true">Sin foto</div>`;
           return `
-            <a class="product-picker-card" href="Producto.html?id=${encodeURIComponent(p.id)}">
+            <a class="product-picker-card" href="producto_personalizado.html?base=${encodeURIComponent(p.id)}">
               <div class="product-picker-img-wrap">${img}</div>
               <div class="product-picker-body">
                 <span class="product-picker-cat">${escapeHtml(p.categoria)}</span>
@@ -85,7 +85,7 @@
       })
       .catch(() => {
         document.getElementById('picker-grid').innerHTML =
-          '<p style="grid-column:1/-1;text-align:center;opacity:0.5;">No se pudo cargar el catálogo.</p>';
+          '<p style="grid-column:1/-1;text-align:center;opacity:0.5;">No se pudieron cargar los productos base.</p>';
       });
   </script>
 

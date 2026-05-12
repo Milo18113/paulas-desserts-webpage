@@ -1,0 +1,53 @@
+[
+  {
+    "id": "pastel",
+    "nombre": "Pastel personalizado",
+    "categoria": "Personalización",
+    "descripcion": "Diseña tu pastel desde cero: sabor, relleno, tamaño, tema y decoración a tu gusto.",
+    "image": "Paula's_Desserts/ChocolateLoversCake.png",
+    "alergenos": [],
+    "tallas": [
+      { "label": "Pequeño", "desc": "6–8 porciones", "precio": null },
+      { "label": "Mediano", "desc": "10–14 porciones", "precio": null },
+      { "label": "Grande", "desc": "16–24 porciones", "precio": null }
+    ]
+  },
+  {
+    "id": "cupcake",
+    "nombre": "Cupcakes personalizados",
+    "categoria": "Personalización",
+    "descripcion": "Caja de cupcakes a tu medida: elige sabor, cobertura y decoración.",
+    "image": "Paula's_Desserts/CajaCupcakes.png",
+    "alergenos": [],
+    "tallas": [
+      { "label": "Caja x6", "desc": "6 cupcakes", "precio": null },
+      { "label": "Caja x12", "desc": "12 cupcakes", "precio": null },
+      { "label": "Caja x24", "desc": "24 cupcakes", "precio": null }
+    ]
+  },
+  {
+    "id": "galleta",
+    "nombre": "Galletas personalizadas",
+    "categoria": "Personalización",
+    "descripcion": "Galletas decoradas con tu tema, colores y mensaje.",
+    "image": "Paula's_Desserts/GalletasAzucar.png",
+    "alergenos": [],
+    "tallas": [
+      { "label": "Bolsa x6", "desc": "6 galletas", "precio": null },
+      { "label": "Caja x12", "desc": "12 galletas", "precio": null },
+      { "label": "Caja x24", "desc": "24 galletas", "precio": null }
+    ]
+  },
+  {
+    "id": "pie",
+    "nombre": "Pie personalizado",
+    "categoria": "Personalización",
+    "descripcion": "Pie hecho a tu gusto: elige sabor, relleno y detalles.",
+    "image": "Paula's_Desserts/PieDeLimon.png",
+    "alergenos": [],
+    "tallas": [
+      { "label": "Pequeño", "desc": "6–8 porciones", "precio": null },
+      { "label": "Mediano", "desc": "10–12 porciones", "precio": null }
+    ]
+  }
+]

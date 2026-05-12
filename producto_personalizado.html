@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Producto — Paula's Desserts</title>
+  <title>Personaliza tu producto — Paula's Desserts</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet" />
@@ -37,9 +37,7 @@
   </header>
 
   <nav class="breadcrumb" id="breadcrumb-nav" aria-label="Migas de pan">
-    <a href="index.html">Menú</a>
-    <span class="breadcrumb-sep" aria-hidden="true">›</span>
-    <a id="breadcrumb-categoria" href="#">Categoría</a>
+    <a href="menu_personalizacion.html">Personalización</a>
     <span class="breadcrumb-sep" aria-hidden="true">›</span>
     <span id="breadcrumb-nombre" class="breadcrumb-current">Producto</span>
   </nav>
@@ -70,17 +68,10 @@
       <hr class="divider" />
 
       <section id="product-personalizacion" class="product-custom-panel" aria-labelledby="personalizacion-titulo">
-        <h2 id="personalizacion-titulo" class="custom-title custom-title--upper">TU PEDIDO</h2>
+        <h2 id="personalizacion-titulo" class="custom-title custom-title--upper">PERSONALIZA TU PEDIDO</h2>
         <p class="custom-hint custom-hint--compact">
-          Elegí el tamaño y la cantidad. Al final <strong>copia el texto</strong> o úsalo en <strong>WhatsApp</strong> para hacer tu pedido.
+          Completa lo que ya tengas claro; cada bloque se <strong>cierra solo</strong> al contestar para acortar la página. Volvé a abrirlo con un clic en el título. Al final <strong>copia el texto</strong> o úsalo en <strong>WhatsApp</strong>.
         </p>
-
-        <div id="product-consulta-block" class="product-consulta-block" hidden>
-          <p class="custom-hint">
-            Este producto se cotiza a pedido según tu diseño y tamaño. Para personalizarlo desde cero, abre el flujo de personalización.
-          </p>
-          <a class="btn-primary" href="menu_personalizacion.html">Ir a personalización</a>
-        </div>
 
         <div class="form-strip">
           <p class="form-block-title">Tipo de producto</p>
@@ -114,6 +105,47 @@
           </div>
         </details>
 
+        <details class="form-accordion" data-acc="sabor" open>
+          <summary class="form-accordion-summary">
+            <span class="form-accordion-title">Sabor</span>
+            <span class="form-accordion-preview" id="acc-preview-sabor"></span>
+          </summary>
+          <div class="form-accordion-body">
+            <p class="custom-microhint custom-microhint--tight">Opciones generales; si no aplica, elige «Otro» y detalla abajo.</p>
+            <div id="product-sabores" class="option-chips" role="radiogroup" aria-label="Sabor"></div>
+          </div>
+        </details>
+
+        <details class="form-accordion" data-acc="tema" open>
+          <summary class="form-accordion-summary">
+            <span class="form-accordion-title">Tema o diseño</span>
+            <span class="form-accordion-preview" id="acc-preview-tema"></span>
+          </summary>
+          <div class="form-accordion-body">
+            <textarea id="field-tema" class="product-field-text" rows="3" maxlength="500" placeholder="Ej.: unicornios, minimalista, floral, infantil…"></textarea>
+          </div>
+        </details>
+
+        <details class="form-accordion" data-acc="colores" open>
+          <summary class="form-accordion-summary">
+            <span class="form-accordion-title">Colores</span>
+            <span class="form-accordion-preview" id="acc-preview-colores"></span>
+          </summary>
+          <div class="form-accordion-body">
+            <input id="field-colores" class="product-field-input" type="text" maxlength="200" placeholder="Ej.: rosa pastel, blanco y dorado…" />
+          </div>
+        </details>
+
+        <details class="form-accordion" data-acc="texto" open>
+          <summary class="form-accordion-summary">
+            <span class="form-accordion-title">Texto personalizado</span>
+            <span class="form-accordion-preview" id="acc-preview-texto"></span>
+          </summary>
+          <div class="form-accordion-body">
+            <input id="field-texto" class="product-field-input" type="text" maxlength="150" placeholder="Texto en la torta o detalle escrito (ej.: Felices 15 Ana)" />
+          </div>
+        </details>
+
         <details class="form-accordion" data-acc="entrega" open>
           <summary class="form-accordion-summary">
             <span class="form-accordion-title">Delivery / retiro</span>
@@ -125,6 +157,17 @@
               <option value="delivery">Delivery</option>
               <option value="coord">A coordinar</option>
             </select>
+          </div>
+        </details>
+
+        <details class="form-accordion" data-acc="diet" open>
+          <summary class="form-accordion-summary">
+            <span class="form-accordion-title">Preferencias dietéticas</span>
+            <span class="form-accordion-preview" id="acc-preview-diet"></span>
+          </summary>
+          <div class="form-accordion-body">
+            <p class="custom-microhint custom-microhint--tight">Podés marcar varias. Se aplican a este pedido.</p>
+            <div id="diet-chips" class="option-chips option-chips--multi" role="group" aria-label="Preferencias dietéticas"></div>
           </div>
         </details>
 
@@ -164,14 +207,6 @@
     </div>
   </section>
 
-  <section class="related" id="related-section">
-    <div class="related-inner">
-      <h2>También te puede gustar</h2>
-      <hr class="related-rule" />
-      <div class="related-grid" id="related-grid"></div>
-    </div>
-  </section>
-
   <footer class="about-site-footer">
     <div class="about-footer-row">
       <span class="about-footer-dash"></span>
@@ -182,8 +217,6 @@
     </div>
   </footer>
 
-  <!-- Catálogo embebido: necesario para abrir la página como file:// (fetch a JSON está bloqueado por CORS) -->
-  <script src="catalogo.embed.js"></script>
-  <script src="producto.js" defer></script>
+  <script src="producto-personalizado.js" defer></script>
 </body>
 </html>

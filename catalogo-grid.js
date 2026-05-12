@@ -25,6 +25,11 @@ function precioDesde(tallas) {
   return precio !== null ? `desde $${Number(precio).toFixed(2)}` : 'A consultar';
 }
 
+// Los productos del catálogo que en realidad son shortcuts a un base de personalización.
+const CATALOGO_TO_BASE = {
+  'pasteles-personalizados': 'pastel',
+};
+
 function buildCard(p) {
   const imgHtml = p.image
     ? `<img class="polaroid-photo" src="${escapeHtml(p.image)}" alt="${escapeHtml(p.nombre)}" loading="lazy" />`
@@ -34,8 +39,13 @@ function buildCard(p) {
     ? p.alergenos.map(a => `<span class="tag">${escapeHtml(a)}</span>`).join('')
     : '';
 
+  const baseId = CATALOGO_TO_BASE[p.id];
+  const href = baseId
+    ? `producto_personalizado.html?base=${encodeURIComponent(baseId)}`
+    : `Producto.html?id=${encodeURIComponent(p.id)}`;
+
   return `
-    <a href="Producto.html?id=${encodeURIComponent(p.id)}" class="polaroid" style="text-decoration:none;color:inherit;cursor:pointer;">
+    <a href="${href}" class="polaroid" style="text-decoration:none;color:inherit;cursor:pointer;">
       <article>
         ${imgHtml}
         <div class="polaroid-body">

@@ -1,89 +1,82 @@
 /**
- * Página de producto del catálogo clásico (sin personalización profunda).
- * Catálogo: fetch(catalogo.json) en http(s), o window.__PD_CATALOGO desde catalogo.embed.js (file://).
+ * Página de personalización de producto base.
+ * Lee ?base=<id> y carga el producto base desde productos-base.json.
  */
 
 const WHATSAPP_NUM = '593980191040';
 
-// id del placeholder del catálogo que dispara la experiencia "A consultar"
-const PERSONALIZADO_PLACEHOLDER_ID = 'pasteles-personalizados';
+const SABORES_OPCIONES = [
+  { label: 'Clásico (según producto)', value: 'clasico' },
+  { label: 'Chocolate', value: 'chocolate' },
+  { label: 'Vainilla', value: 'vainilla' },
+  { label: 'Red velvet', value: 'red-velvet' },
+  { label: 'Frutos rojos / berries', value: 'frutos-rojos' },
+  { label: 'Limón / cítricos', value: 'limon' },
+  { label: 'Dulce de leche / caramelo', value: 'ddl' },
+  { label: 'Café / mocha', value: 'mocha' },
+  { label: 'Matcha / té', value: 'matcha' },
+  { label: 'Sin preferencia', value: 'sin-pref' },
+  { label: 'Otro (detallar abajo)', value: 'otro' },
+];
+
+const DIET_OPCIONES = [
+  { id: 'sin-azucar', label: 'Sin azúcar' },
+  { id: 'gluten-free', label: 'Gluten free' },
+  { id: 'vegano', label: 'Vegano' },
+  { id: 'sin-frutos-secos', label: 'Sin frutos secos' },
+  { id: 'bajo-dulce', label: 'Bajo en dulce' },
+];
 
 const state = {
   producto: null,
   selectedTalla: null,
+  selectedSabor: null,
   selectedEnvase: null,
+  dietSelected: new Set(),
 };
 
-async function loadCatalogo() {
-  const useNetwork =
-    window.location.protocol === 'http:' || window.location.protocol === 'https:';
-
-  if (useNetwork) {
-    try {
-      const res = await fetch('catalogo.json', { cache: 'no-store' });
-      if (res.ok) return await res.json();
-    } catch (_) {}
-  }
-
-  if (Array.isArray(window.__PD_CATALOGO) && window.__PD_CATALOGO.length) {
-    return window.__PD_CATALOGO;
-  }
-
-  throw new Error('CATALOGO_UNAVAILABLE');
+async function loadProductosBase() {
+  const res = await fetch('productos-base.json', { cache: 'no-store' });
+  if (!res.ok) throw new Error('PRODUCTOS_BASE_UNAVAILABLE');
+  return await res.json();
 }
 
 (async () => {
-  let catalogo;
+  let productos;
   try {
-    catalogo = await loadCatalogo();
+    productos = await loadProductosBase();
   } catch {
     mostrarError(
-      'No se pudo cargar el catálogo. En <code>Producto.html</code>, incluye <code>&lt;script src=&quot;catalogo.embed.js&quot;&gt;&lt;/script&gt;</code> <strong>antes</strong> de <code>producto.js</code>, o abre el sitio con un servidor (por ejemplo <code>npx serve .</code>).'
+      'No se pudieron cargar los productos base. Abre el sitio con un servidor local (por ejemplo <code>npx serve .</code> o Live Server).'
     );
     return;
   }
 
   const params = new URLSearchParams(window.location.search);
-  const id = params.get('id');
+  const id = params.get('base');
 
   if (!id) {
-    window.location.replace('index.html');
+    window.location.replace('menu_personalizacion.html');
     return;
   }
 
-  const producto = catalogo.find((p) => p.id === id);
+  const producto = productos.find((p) => p.id === id);
   if (!producto) {
-    mostrarError(`No encontramos el producto «${escapeHtml(id)}». <a href="index.html">Volver al inicio</a>`);
+    mostrarError(`No encontramos el producto base «${escapeHtml(id)}». <a href="menu_personalizacion.html">Ver listado</a>`);
     return;
   }
 
-  poblarPagina(producto, catalogo);
+  poblarPagina(producto);
 })();
 
 
-// Mapeo de categoría a página del menú para el breadcrumb.
-function categoriaToHref(categoria) {
-  const c = (categoria || '').toLowerCase();
-  if (c.includes('pastel')) return 'pasteles.html';
-  if (c.includes('cupcake')) return 'cupcakes.html';
-  if (c.includes('gallet')) return 'galletas.html';
-  return 'otros.html';
-}
-
-function poblarPagina(producto, catalogo) {
+function poblarPagina(producto) {
   state.producto = producto;
+  state.dietSelected = new Set();
 
   document.title = `${producto.nombre} — Paula's Desserts`;
 
-  const related = document.getElementById('related-section');
-  if (related) related.hidden = false;
-
   document.getElementById('breadcrumb-nombre').textContent = producto.nombre;
-  const crumbCat = document.getElementById('breadcrumb-categoria');
-  if (crumbCat) {
-    crumbCat.textContent = producto.categoria || 'Menú';
-    crumbCat.href = categoriaToHref(producto.categoria);
-  }
 
   const img = document.getElementById('product-img');
   const placeholder = document.getElementById('product-img-placeholder');
@@ -128,51 +121,28 @@ function poblarPagina(producto, catalogo) {
   const tipoLine = document.getElementById('product-tipo-line');
   if (tipoLine) tipoLine.textContent = `${producto.nombre} · ${producto.categoria}`;
 
-  const esConsulta = producto.id === PERSONALIZADO_PLACEHOLDER_ID;
-  aplicarModoConsulta(esConsulta);
+  renderTallas(producto.tallas);
+  renderSabores();
+  renderEnvases(producto);
+  renderDietChips();
 
-  if (!esConsulta) {
-    renderTallas(producto.tallas);
-    renderEnvases(producto);
-
-    const panel = document.getElementById('product-personalizacion');
-    const sync = () => updatePersonalizacionResumen(producto);
-    if (panel) {
-      initAccordionBlurOnce(panel);
-      panel.addEventListener('input', sync);
-      panel.addEventListener('change', (e) => {
-        sync();
-        onPanelAccordionChange(e.target);
-      });
-    }
-
-    const btnGuardar = document.getElementById('btn-guardar');
-    if (btnGuardar) {
-      btnGuardar.addEventListener('click', () => guardarPersonalizacion(producto));
-    }
-
-    updatePersonalizacionResumen(producto);
+  const panel = document.getElementById('product-personalizacion');
+  const sync = () => updatePersonalizacionResumen(producto);
+  if (panel) {
+    initAccordionBlurOnce(panel);
+    panel.addEventListener('input', sync);
+    panel.addEventListener('change', (e) => {
+      sync();
+      onPanelAccordionChange(e.target);
+    });
   }
 
-  renderRelacionados(producto.relacionados || [], catalogo);
-}
+  const btnGuardar = document.getElementById('btn-guardar');
+  if (btnGuardar) {
+    btnGuardar.addEventListener('click', () => guardarPersonalizacion(producto));
+  }
 
-// Oculta acordeones/precio/CTAs y muestra el bloque "A consultar" — solo para el placeholder del catálogo.
-function aplicarModoConsulta(activo) {
-  const consultaBlock = document.getElementById('product-consulta-block');
-  if (consultaBlock) consultaBlock.hidden = !activo;
-
-  const selectores = [
-    '#product-personalizacion .form-strip',
-    '#product-personalizacion details.form-accordion',
-    '#product-personalizacion .cta-row',
-    '#product-personalizacion-resumen',
-  ];
-  selectores.forEach((sel) => {
-    document.querySelectorAll(sel).forEach((el) => {
-      el.hidden = activo;
-    });
-  });
+  updatePersonalizacionResumen(producto);
 }
 
 function escapeHtml(s) {
@@ -198,6 +168,9 @@ function val(id) {
 function getFormExtras() {
   return {
     cantidad: getCantidad(),
+    tema: val('field-tema'),
+    colores: val('field-colores'),
+    texto: val('field-texto'),
     entrega: val('field-entrega') || 'coord',
     notasExtra: val('field-notas-extra'),
   };
@@ -232,13 +205,31 @@ function detailsByAcc(name) {
   return document.querySelector(`details.form-accordion[data-acc="${name}"]`);
 }
 
+let dietAccordionCloseTimer = null;
+function scheduleDietAccordionClose() {
+  clearTimeout(dietAccordionCloseTimer);
+  dietAccordionCloseTimer = setTimeout(() => {
+    const det = detailsByAcc('diet');
+    if (det) scheduleCloseDetails(det);
+  }, 780);
+}
+
 function updateAccordionPreviews() {
   const x = getFormExtras();
 
   const t = state.selectedTalla;
   setAccordionPreviewText('acc-preview-talla', t ? t.label : '…');
 
+  setAccordionPreviewText('acc-preview-sabor', state.selectedSabor ? state.selectedSabor.label : '…');
+
+  setAccordionPreviewText('acc-preview-tema', clipPreview(x.tema) || 'Sin indicar');
+  setAccordionPreviewText('acc-preview-colores', clipPreview(x.colores) || 'Sin indicar');
+  setAccordionPreviewText('acc-preview-texto', clipPreview(x.texto) || 'Sin indicar');
+
   setAccordionPreviewText('acc-preview-entrega', ENTREGA_LABEL[x.entrega] || '…');
+
+  const diets = [...state.dietSelected];
+  setAccordionPreviewText('acc-preview-diet', diets.length ? clipPreview(diets.join(', '), 48) : 'Ninguna');
 
   const envBlock = document.getElementById('product-envase-block');
   if (envBlock && envBlock.hidden) {
@@ -261,7 +252,7 @@ function onPanelAccordionChange(target) {
 function initAccordionBlurOnce(panel) {
   if (!panel || panel.dataset.accBlur === '1') return;
   panel.dataset.accBlur = '1';
-  const textFieldIds = new Set(['field-notas-extra']);
+  const textFieldIds = new Set(['field-tema', 'field-colores', 'field-texto', 'field-notas-extra']);
   panel.addEventListener(
     'blur',
     (e) => {
@@ -358,6 +349,41 @@ function renderTallas(tallas) {
   };
 }
 
+function renderSabores() {
+  const contenedor = document.getElementById('product-sabores');
+  if (!contenedor) return;
+
+  contenedor.innerHTML = '';
+  SABORES_OPCIONES.forEach((op, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = `chip chip-sabor${i === 0 ? ' selected' : ''}`;
+    btn.dataset.value = op.value;
+    btn.textContent = op.label;
+    btn.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+    btn.setAttribute('role', 'radio');
+    contenedor.appendChild(btn);
+  });
+
+  state.selectedSabor = SABORES_OPCIONES[0];
+
+  contenedor.onclick = (e) => {
+    const chip = e.target.closest('.chip-sabor');
+    if (!chip) return;
+    contenedor.querySelectorAll('.chip-sabor').forEach((c) => {
+      c.classList.remove('selected');
+      c.setAttribute('aria-pressed', 'false');
+    });
+    chip.classList.add('selected');
+    chip.setAttribute('aria-pressed', 'true');
+    state.selectedSabor = SABORES_OPCIONES.find((o) => o.value === chip.dataset.value) || null;
+    updatePersonalizacionResumen(state.producto);
+    scheduleCloseDetails(detailsByAcc('sabor'));
+  };
+
+  updatePersonalizacionResumen(state.producto);
+}
+
 function obtenerOpcionesEnvase(producto) {
   if (Array.isArray(producto.envases) && producto.envases.length) {
     return producto.envases.map((label) => ({
@@ -366,9 +392,9 @@ function obtenerOpcionesEnvase(producto) {
     }));
   }
 
-  const cat = (producto.categoria || '').toLowerCase();
+  const id = (producto.id || '').toLowerCase();
 
-  if (cat.includes('cupcake')) {
+  if (id === 'cupcake') {
     return [
       { label: 'Caja estándar', value: 'caja-estandar' },
       { label: 'Caja regalo', value: 'caja-regalo' },
@@ -376,7 +402,7 @@ function obtenerOpcionesEnvase(producto) {
     ];
   }
 
-  if (cat.includes('gallet') || cat.includes('brown') || cat.includes('cookie')) {
+  if (id === 'galleta') {
     return [
       { label: 'Bolsa / empaque simple', value: 'bolsa' },
       { label: 'Caja regalo', value: 'caja-regalo' },
@@ -439,6 +465,44 @@ function renderEnvases(producto) {
   updatePersonalizacionResumen(state.producto);
 }
 
+function renderDietChips() {
+  const contenedor = document.getElementById('diet-chips');
+  if (!contenedor) return;
+
+  state.dietSelected = new Set();
+  contenedor.innerHTML = '';
+
+  DIET_OPCIONES.forEach((d) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'chip chip-diet';
+    btn.dataset.dietId = d.id;
+    btn.textContent = d.label;
+    btn.setAttribute('aria-pressed', 'false');
+    contenedor.appendChild(btn);
+  });
+
+  contenedor.onclick = (e) => {
+    const chip = e.target.closest('.chip-diet');
+    if (!chip) return;
+    const id = chip.dataset.dietId;
+    const opt = DIET_OPCIONES.find((x) => x.id === id);
+    if (!opt) return;
+
+    if (state.dietSelected.has(opt.label)) {
+      state.dietSelected.delete(opt.label);
+      chip.classList.remove('selected');
+      chip.setAttribute('aria-pressed', 'false');
+    } else {
+      state.dietSelected.add(opt.label);
+      chip.classList.add('selected');
+      chip.setAttribute('aria-pressed', 'true');
+    }
+    updatePersonalizacionResumen(state.producto);
+    scheduleDietAccordionClose();
+  };
+}
+
 function buildMensajePedido(producto) {
   const x = getFormExtras();
   const precioUnit =
@@ -446,23 +510,33 @@ function buildMensajePedido(producto) {
       ? `$${Number(state.selectedTalla.precio).toFixed(2)}`
       : 'A consultar';
 
+  const saborTxt = state.selectedSabor ? state.selectedSabor.label : '—';
   const envaseTxt = state.selectedEnvase ? state.selectedEnvase.label : '—';
   const tallaTxt = state.selectedTalla
     ? `${state.selectedTalla.label} (${state.selectedTalla.desc || 'porciones'}) — ${precioUnit}`
     : 'A definir';
+
+  const dietas =
+    state.dietSelected.size > 0 ? [...state.dietSelected].join(', ') : 'Ninguna indicada';
 
   const line = (label, val) => (val ? `\n- ${label}: ${val}` : '');
 
   const msg = [
     "Hola Paula's Desserts!",
     '',
-    '=== PEDIDO ===',
-    `- Producto: ${producto.nombre} (${producto.categoria})`,
+    '=== PERSONALIZACIÓN DE PEDIDO ===',
+    `- Tipo de producto: ${producto.nombre} (${producto.categoria})`,
     `- Cantidad de unidades: ${x.cantidad}`,
     `- Tamaño / porciones: ${tallaTxt}`,
+    `- Sabor: ${saborTxt}`,
     `- Empaque / presentación: ${envaseTxt}`,
+    line('Tema o diseño', x.tema),
+    line('Colores', x.colores),
+    line('Texto personalizado', x.texto),
     '',
     `- Entrega: ${ENTREGA_LABEL[x.entrega] || x.entrega}`,
+    '',
+    `- Preferencias dietéticas: ${dietas}`,
     line('Extras u otras notas', x.notasExtra),
     '',
     '(Generado desde la web — podés editar antes de enviar)',
@@ -489,7 +563,10 @@ function updatePersonalizacionResumen(producto) {
       ? `$${Number(state.selectedTalla.precio).toFixed(2)}`
       : 'A consultar';
 
-  resumenEl.textContent = `${x.cantidad}× ${producto.nombre} · ${state.selectedTalla.label} (${precio})`;
+  const sabor = state.selectedSabor ? state.selectedSabor.label : '—';
+  const dietas = state.dietSelected.size ? [...state.dietSelected].join(' · ') : '—';
+
+  resumenEl.textContent = `${x.cantidad}× ${producto.nombre} · ${state.selectedTalla.label} (${precio}) · Sabor: ${sabor} · Dietas: ${dietas}`;
 
   if (wa) {
     wa.href = `https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(buildMensajePedido(producto))}`;
@@ -522,50 +599,13 @@ async function guardarPersonalizacion(producto) {
   }, 1800);
 }
 
-function renderRelacionados(ids, catalogo) {
-  const grid = document.getElementById('related-grid');
-  if (!grid) return;
-  grid.innerHTML = '';
-
-  if (!ids || !ids.length) {
-    grid.innerHTML = '<p class="custom-hint">Pronto más recomendaciones.</p>';
-    return;
-  }
-
-  ids.forEach((id) => {
-    const p = catalogo.find((x) => x.id === id);
-    if (!p) return;
-
-    const desc = (p.descripcion || '').split('.')[0] || p.categoria;
-    const imgHtml = p.image
-      ? `<img class="polaroid-img" src="${escapeHtml(p.image)}" alt="${escapeHtml(p.nombre)}" loading="lazy" />`
-      : `<div class="polaroid-img polaroid-img--empty" role="img" aria-label="Sin foto">Sin foto</div>`;
-
-    grid.insertAdjacentHTML(
-      'beforeend',
-      `
-      <a href="Producto.html?id=${encodeURIComponent(p.id)}" class="polaroid">
-        ${imgHtml}
-        <div class="polaroid-label">
-          <div class="product-name">${escapeHtml(p.nombre)}</div>
-          <div class="product-desc">${escapeHtml(p.categoria)} · ${escapeHtml(desc)}</div>
-        </div>
-      </a>
-    `
-    );
-  });
-}
-
 function mostrarError(msg) {
   const hero = document.getElementById('product-hero') || document.querySelector('.product-hero');
-  const related = document.getElementById('related-section');
-  if (related) related.hidden = true;
   if (!hero) return;
   hero.innerHTML = `
     <div class="product-error" style="grid-column:1/-1;text-align:center;padding:60px 20px;">
       <p style="font-size:17px;color:var(--color-primary);opacity:0.9;font-family:var(--font-body);max-width:46ch;margin:0 auto 20px;line-height:1.55;">${msg}</p>
-      <p style="margin:0 0 12px;"><a href="index.html" style="color:var(--color-primary);font-size:15px;font-weight:700;font-family:var(--font-body);">← Volver al inicio</a></p>
-      <p style="margin:0;"><a href="menu_personalizacion.html" style="color:var(--color-primary);font-size:14px;font-weight:600;font-family:var(--font-body);">Ir a personalización</a></p>
+      <p style="margin:0;"><a href="menu_personalizacion.html" style="color:var(--color-primary);font-size:15px;font-weight:700;font-family:var(--font-body);">← Volver a personalización</a></p>
     </div>
   `;
 }
