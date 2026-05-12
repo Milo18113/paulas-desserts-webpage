@@ -1,15 +1,39 @@
 /**
  * Página de producto / personalización.
- * - Con http(s): intenta fetch('catalogo.json'); si falla, usa window.__PD_CATALOGO (catalogo.embed.js).
- * - Con file://: el navegador bloquea fetch a disco; hace falta catalogo.embed.js antes de este script.
+ * Catálogo: fetch(catalogo.json) en http(s), o window.__PD_CATALOGO desde catalogo.embed.js (file://).
  */
 
 const WHATSAPP_NUM = '593980191040';
 
+/** Sabores mostrados para todos los productos (una sola elección). */
+const SABORES_OPCIONES = [
+  { label: 'Clásico (según producto)', value: 'clasico' },
+  { label: 'Chocolate', value: 'chocolate' },
+  { label: 'Vainilla', value: 'vainilla' },
+  { label: 'Red velvet', value: 'red-velvet' },
+  { label: 'Frutos rojos / berries', value: 'frutos-rojos' },
+  { label: 'Limón / cítricos', value: 'limon' },
+  { label: 'Dulce de leche / caramelo', value: 'ddl' },
+  { label: 'Café / mocha', value: 'mocha' },
+  { label: 'Matcha / té', value: 'matcha' },
+  { label: 'Sin preferencia', value: 'sin-pref' },
+  { label: 'Otro (detallar abajo)', value: 'otro' },
+];
+
+const DIET_OPCIONES = [
+  { id: 'sin-azucar', label: 'Sin azúcar' },
+  { id: 'gluten-free', label: 'Gluten free' },
+  { id: 'vegano', label: 'Vegano' },
+  { id: 'sin-frutos-secos', label: 'Sin frutos secos' },
+  { id: 'bajo-dulce', label: 'Bajo en dulce' },
+];
+
 const state = {
   producto: null,
   selectedTalla: null,
-  selectedOpcion: null,
+  selectedSabor: null,
+  selectedEnvase: null,
+  dietSelected: new Set(),
 };
 
 async function loadCatalogo() {
@@ -20,9 +44,7 @@ async function loadCatalogo() {
     try {
       const res = await fetch('catalogo.json', { cache: 'no-store' });
       if (res.ok) return await res.json();
-    } catch (_) {
-      /* seguir al respaldo */
-    }
+    } catch (_) {}
   }
 
   if (Array.isArray(window.__PD_CATALOGO) && window.__PD_CATALOGO.length) {
@@ -38,7 +60,7 @@ async function loadCatalogo() {
     catalogo = await loadCatalogo();
   } catch {
     mostrarError(
-      'No se pudo cargar el catálogo. En Producto.html, antes de producto.js, incluye un script con src "catalogo.embed.js" (archivo generado desde catalogo.json). También puedes servir la carpeta con un servidor local, por ejemplo: npx serve .'
+      'No se pudo cargar el catálogo. En <code>Producto.html</code>, incluye <code>&lt;script src=&quot;catalogo.embed.js&quot;&gt;&lt;/script&gt;</code> <strong>antes</strong> de <code>producto.js</code>, o abre el sitio con un servidor (por ejemplo <code>npx serve .</code>).'
     );
     return;
   }
@@ -53,7 +75,7 @@ async function loadCatalogo() {
 
   const producto = catalogo.find((p) => p.id === id);
   if (!producto) {
-    mostrarError(`No encontramos el producto «${id}». Usa los enlaces de abajo para ver el listado.`);
+    mostrarError(`No encontramos el producto «${escapeHtml(id)}». <a href="Producto.html">Ver listado</a>`);
     return;
   }
 
@@ -79,7 +101,7 @@ function mostrarSelectorProductos(catalogo) {
     <div class="product-picker">
       <h2 class="product-picker-title">¿Qué quieres personalizar?</h2>
       <p class="product-picker-lead">
-        Elige un producto para ver foto, precios por tamaño y opciones de sabor o estilo. Luego podrás copiar el pedido o enviarlo por WhatsApp.
+        Elige un producto y completa el formulario. Luego copia el pedido o envíalo por WhatsApp.
       </p>
       <div class="product-picker-grid">
         ${catalogo
@@ -108,6 +130,7 @@ function mostrarSelectorProductos(catalogo) {
 
 function poblarPagina(producto, catalogo) {
   state.producto = producto;
+  state.dietSelected = new Set();
 
   document.title = `${producto.nombre} — Paula's Desserts`;
 
@@ -157,38 +180,28 @@ function poblarPagina(producto, catalogo) {
       ? producto.alergenos.map((a) => `<li>${escapeHtml(a)}</li>`).join('')
       : '<li>Sin alérgenos declarados en ficha</li>';
 
-  renderTallas(producto.tallas, producto);
-  renderOpcionesExtra(producto);
+  const tipoLine = document.getElementById('product-tipo-line');
+  if (tipoLine) tipoLine.textContent = `${producto.nombre} · ${producto.categoria}`;
 
-  const btnScroll = document.getElementById('btn-personalizar-scroll');
+  renderTallas(producto.tallas);
+  renderSabores();
+  renderEnvases(producto);
+  renderDietChips();
+
   const panel = document.getElementById('product-personalizacion');
-  if (btnScroll && panel) {
-    btnScroll.addEventListener('click', () => {
-      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      requestAnimationFrame(() => {
-        const firstChip = panel.querySelector('.chip');
-        const firstSize =
-          panel.querySelector('.size-card.selected') || panel.querySelector('.size-card');
-        if (firstChip) firstChip.focus();
-        else if (firstSize) firstSize.focus();
-      });
+  const sync = () => updatePersonalizacionResumen(producto);
+  if (panel) {
+    initAccordionBlurOnce(panel);
+    panel.addEventListener('input', sync);
+    panel.addEventListener('change', (e) => {
+      sync();
+      onPanelAccordionChange(e.target);
     });
   }
 
   const btnGuardar = document.getElementById('btn-guardar');
   if (btnGuardar) {
     btnGuardar.addEventListener('click', () => guardarPersonalizacion(producto));
-  }
-
-  const notasEl = document.getElementById('product-notas');
-  if (notasEl) {
-    notasEl.addEventListener('input', () => updatePersonalizacionResumen(producto));
-  }
-
-  const cantidadEl = document.getElementById('product-cantidad');
-  if (cantidadEl) {
-    cantidadEl.addEventListener('input', () => updatePersonalizacionResumen(producto));
-    cantidadEl.addEventListener('change', () => updatePersonalizacionResumen(producto));
   }
 
   renderRelacionados(producto.relacionados || [], catalogo);
@@ -203,14 +216,6 @@ function escapeHtml(s) {
     .replace(/"/g, '&quot;');
 }
 
-/** Texto plano seguro para mensajes (WhatsApp, portapapeles); evita ángulos y caracteres de control. */
-function sanitizePlainText(s) {
-  return String(s ?? '')
-    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
-    .replace(/</g, '')
-    .replace(/>/g, '');
-}
-
 function getCantidad() {
   const el = document.getElementById('product-cantidad');
   const n = parseInt(el && el.value, 10);
@@ -218,18 +223,119 @@ function getCantidad() {
   return Math.min(99, n);
 }
 
-function renderTallas(tallas, producto) {
+function val(id) {
+  const el = document.getElementById(id);
+  return el && 'value' in el ? String(el.value || '').trim() : '';
+}
+
+function getFormExtras() {
+  return {
+    cantidad: getCantidad(),
+    tema: val('field-tema'),
+    colores: val('field-colores'),
+    texto: val('field-texto'),
+    entrega: val('field-entrega') || 'coord',
+    notasExtra: val('field-notas-extra'),
+  };
+}
+
+const ENTREGA_LABEL = {
+  retiro: 'Retiro en local',
+  delivery: 'Delivery',
+  coord: 'A coordinar',
+};
+
+function clipPreview(s, max = 44) {
+  const t = String(s || '').trim();
+  if (!t) return '';
+  return t.length <= max ? t : `${t.slice(0, max - 1)}…`;
+}
+
+function setAccordionPreviewText(id, text) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+function scheduleCloseDetails(det) {
+  if (!det || typeof det.matches !== 'function' || !det.matches('details.form-accordion')) return;
+  clearTimeout(det._accCloseT);
+  det._accCloseT = setTimeout(() => {
+    det.open = false;
+  }, 420);
+}
+
+function detailsByAcc(name) {
+  return document.querySelector(`details.form-accordion[data-acc="${name}"]`);
+}
+
+let dietAccordionCloseTimer = null;
+function scheduleDietAccordionClose() {
+  clearTimeout(dietAccordionCloseTimer);
+  dietAccordionCloseTimer = setTimeout(() => {
+    const det = detailsByAcc('diet');
+    if (det) scheduleCloseDetails(det);
+  }, 780);
+}
+
+function updateAccordionPreviews() {
+  const x = getFormExtras();
+
+  const t = state.selectedTalla;
+  setAccordionPreviewText('acc-preview-talla', t ? t.label : '…');
+
+  setAccordionPreviewText('acc-preview-sabor', state.selectedSabor ? state.selectedSabor.label : '…');
+
+  setAccordionPreviewText('acc-preview-tema', clipPreview(x.tema) || 'Sin indicar');
+  setAccordionPreviewText('acc-preview-colores', clipPreview(x.colores) || 'Sin indicar');
+  setAccordionPreviewText('acc-preview-texto', clipPreview(x.texto) || 'Sin indicar');
+
+  setAccordionPreviewText('acc-preview-entrega', ENTREGA_LABEL[x.entrega] || '…');
+
+  const diets = [...state.dietSelected];
+  setAccordionPreviewText('acc-preview-diet', diets.length ? clipPreview(diets.join(', '), 48) : 'Ninguna');
+
+  const envBlock = document.getElementById('product-envase-block');
+  if (envBlock && envBlock.hidden) {
+    setAccordionPreviewText('acc-preview-envase', '—');
+  } else {
+    setAccordionPreviewText('acc-preview-envase', state.selectedEnvase ? state.selectedEnvase.label : '…');
+  }
+
+  setAccordionPreviewText('acc-preview-notas', clipPreview(x.notasExtra) || 'Sin notas');
+}
+
+function onPanelAccordionChange(target) {
+  if (!target || !target.id) return;
+  if (target.id === 'field-entrega') {
+    const det = target.closest('details.form-accordion');
+    if (det) scheduleCloseDetails(det);
+  }
+}
+
+function initAccordionBlurOnce(panel) {
+  if (!panel || panel.dataset.accBlur === '1') return;
+  panel.dataset.accBlur = '1';
+  const textFieldIds = new Set(['field-tema', 'field-colores', 'field-texto', 'field-notas-extra']);
+  panel.addEventListener(
+    'blur',
+    (e) => {
+      const t = e.target;
+      if (!t || !textFieldIds.has(t.id)) return;
+      const det = t.closest('details.form-accordion');
+      if (det) scheduleCloseDetails(det);
+    },
+    true
+  );
+}
+
+function renderTallas(tallas) {
   const contenedor = document.getElementById('product-tallas');
   const precioEl = document.getElementById('product-price');
   const noteEl = document.getElementById('product-price-note');
 
   const tallasCopy = tallas && tallas.length ? tallas : null;
 
-  const setSelectedTalla = (index) => {
-    if (!tallasCopy || !tallasCopy.length || !contenedor) return;
-    const max = tallasCopy.length - 1;
-    const idx = Math.min(max, Math.max(0, Number(index) || 0));
-    const talla = tallasCopy[idx];
+  const setSelectedTalla = (talla, index) => {
     state.selectedTalla = talla;
     precioEl.textContent =
       talla.precio !== null && talla.precio !== undefined
@@ -238,16 +344,15 @@ function renderTallas(tallas, producto) {
     if (noteEl) {
       noteEl.textContent =
         !tallasCopy || tallasCopy.length <= 1
-          ? 'Precio orientativo por presentación.'
-          : 'Según el tamaño elegido.';
+          ? 'Precio según la presentación elegida (porciones ≈ personas).'
+          : 'El precio cambia según el tamaño / porciones.';
     }
     contenedor.querySelectorAll('.size-card').forEach((c, j) => {
-      const selected = j === idx;
-      c.classList.toggle('selected', selected);
-      c.setAttribute('aria-checked', selected ? 'true' : 'false');
-      c.tabIndex = selected ? 0 : -1;
+      c.classList.toggle('selected', j === index);
+      c.setAttribute('aria-checked', j === index ? 'true' : 'false');
+      c.tabIndex = j === index ? 0 : -1;
     });
-    if (producto) updatePersonalizacionResumen(producto);
+    updatePersonalizacionResumen(state.producto);
   };
 
   if (!tallasCopy) {
@@ -270,13 +375,14 @@ function renderTallas(tallas, producto) {
     )
     .join('');
 
-  setSelectedTalla(0);
+  setSelectedTalla(tallasCopy[0], 0);
 
   contenedor.onclick = (e) => {
     const card = e.target.closest('.size-card');
     if (!card) return;
     const idx = Number(card.dataset.index);
-    setSelectedTalla(Number.isFinite(idx) ? idx : 0);
+    setSelectedTalla(tallasCopy[idx], idx);
+    scheduleCloseDetails(detailsByAcc('talla'));
   };
 
   contenedor.onkeydown = (e) => {
@@ -285,197 +391,245 @@ function renderTallas(tallas, producto) {
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
       e.preventDefault();
       const next = Math.min(cards.length - 1, current + 1);
-      setSelectedTalla(next);
+      setSelectedTalla(tallasCopy[next], next);
       cards[next]?.focus();
+      scheduleCloseDetails(detailsByAcc('talla'));
     } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
       e.preventDefault();
       const prev = Math.max(0, current - 1);
-      setSelectedTalla(prev);
+      setSelectedTalla(tallasCopy[prev], prev);
       cards[prev]?.focus();
+      scheduleCloseDetails(detailsByAcc('talla'));
     } else if (e.key === 'Enter' || e.key === ' ') {
       const card = e.target.closest('.size-card');
       if (card) {
         e.preventDefault();
         const idx = Number(card.dataset.index);
-        setSelectedTalla(Number.isFinite(idx) ? idx : 0);
+        setSelectedTalla(tallasCopy[idx], idx);
+        scheduleCloseDetails(detailsByAcc('talla'));
       }
     }
   };
 }
 
-function renderOpcionesExtra(producto) {
-  const contenedor = document.getElementById('product-opciones');
-  const wrap = document.getElementById('product-opciones-wrap');
-  if (!contenedor || !wrap) return;
+function renderSabores() {
+  const contenedor = document.getElementById('product-sabores');
+  if (!contenedor) return;
 
-  const opciones = obtenerOpcionesExtra(producto);
-
-  if (!opciones.length) {
-    wrap.classList.add('is-hidden');
-    contenedor.innerHTML = '';
-    state.selectedOpcion = null;
-    updatePersonalizacionResumen(producto);
-    return;
-  }
-
-  wrap.classList.remove('is-hidden');
   contenedor.innerHTML = '';
-  opciones.forEach((op, i) => {
+  SABORES_OPCIONES.forEach((op, i) => {
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = `chip${i === 0 ? ' selected' : ''}`;
+    btn.className = `chip chip-sabor${i === 0 ? ' selected' : ''}`;
     btn.dataset.value = op.value;
     btn.textContent = op.label;
     btn.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+    btn.setAttribute('role', 'radio');
     contenedor.appendChild(btn);
   });
 
-  state.selectedOpcion = opciones[0] || null;
+  state.selectedSabor = SABORES_OPCIONES[0];
 
   contenedor.onclick = (e) => {
-    const chip = e.target.closest('.chip');
+    const chip = e.target.closest('.chip-sabor');
     if (!chip) return;
-    contenedor.querySelectorAll('.chip').forEach((c) => {
+    contenedor.querySelectorAll('.chip-sabor').forEach((c) => {
       c.classList.remove('selected');
       c.setAttribute('aria-pressed', 'false');
     });
     chip.classList.add('selected');
     chip.setAttribute('aria-pressed', 'true');
-    state.selectedOpcion = opciones.find((o) => o.value === chip.dataset.value) || null;
-    updatePersonalizacionResumen(producto);
+    state.selectedSabor = SABORES_OPCIONES.find((o) => o.value === chip.dataset.value) || null;
+    updatePersonalizacionResumen(state.producto);
+    scheduleCloseDetails(detailsByAcc('sabor'));
   };
 
-  updatePersonalizacionResumen(producto);
+  updatePersonalizacionResumen(state.producto);
 }
 
-function obtenerOpcionesExtra(producto) {
-  const cat = (producto.categoria || '').toLowerCase();
-
-  if (cat.includes('personal')) {
-    return [
-      { label: 'Sabor a tu gusto', value: 'sabor-a-tu-gusto' },
-      { label: 'Relleno elegido', value: 'relleno-elegido' },
-      { label: 'Decoración personalizada', value: 'decoracion-personalizada' },
-      { label: 'Sin alérgenos (si aplica)', value: 'sin-alergenos' },
-    ];
+function obtenerOpcionesEnvase(producto) {
+  if (Array.isArray(producto.envases) && producto.envases.length) {
+    return producto.envases.map((label) => ({
+      label: String(label),
+      value: String(label).toLowerCase().replace(/\s+/g, '-'),
+    }));
   }
+
+  const cat = (producto.categoria || '').toLowerCase();
 
   if (cat.includes('cupcake')) {
     return [
-      { label: 'Vainilla', value: 'vainilla' },
-      { label: 'Chocolate', value: 'chocolate' },
-      { label: 'Frutilla', value: 'frutilla' },
-      { label: 'Personalizado', value: 'personalizado' },
+      { label: 'Caja estándar', value: 'caja-estandar' },
+      { label: 'Caja regalo', value: 'caja-regalo' },
+      { label: 'Sin preferencia', value: 'sin-pref' },
     ];
   }
 
-  if (cat.includes('gallet')) {
+  if (cat.includes('gallet') || cat.includes('brown') || cat.includes('cookie')) {
     return [
-      { label: 'Clásicas', value: 'clasicas' },
-      { label: 'Royal icing', value: 'royal-icing' },
-      { label: 'Con chispas', value: 'con-chispas' },
-      { label: 'Personalizadas', value: 'galletas-personalizadas' },
-    ];
-  }
-
-  if (cat.includes('pastel')) {
-    return [
-      { label: 'Chocolate', value: 'chocolate' },
-      { label: 'Vainilla', value: 'vainilla' },
-      { label: 'Frutos rojos', value: 'frutos-rojos' },
-      { label: 'Con merengue', value: 'con-merengue' },
-      { label: 'Personalizado', value: 'personalizado' },
-    ];
-  }
-
-  if (cat.includes('pie') || cat.includes('pies')) {
-    return [
-      { label: 'Clásico', value: 'clasico' },
-      { label: 'Extra merengue', value: 'extra-merengue' },
-      { label: 'Menos azúcar', value: 'menos-azucar' },
-      { label: 'Personalizado', value: 'personalizado' },
-    ];
-  }
-
-  if (cat.includes('cheesecake')) {
-    return [
-      { label: 'Clásico', value: 'clasico' },
-      { label: 'Extra topping', value: 'extra-topping' },
-      { label: 'Personalizado', value: 'personalizado' },
-    ];
-  }
-
-  if (cat.includes('brown') || cat.includes('banana')) {
-    return [
-      { label: 'Clásico', value: 'clasico' },
-      { label: 'Extra indulgente', value: 'extra-indulgente' },
-      { label: 'Frutos rojos', value: 'frutos-rojos' },
-      { label: 'Personalizado', value: 'personalizado' },
+      { label: 'Bolsa / empaque simple', value: 'bolsa' },
+      { label: 'Caja regalo', value: 'caja-regalo' },
+      { label: 'Bandeja', value: 'bandeja' },
     ];
   }
 
   return [
-    { label: 'Clásico', value: 'clasico' },
-    { label: 'Personalizado', value: 'personalizado' },
+    { label: 'Presentación habitual', value: 'estandar' },
+    { label: 'Base + domo', value: 'domo' },
+    { label: 'Caja transporte', value: 'caja-transporte' },
+    { label: 'A coordinar por WhatsApp', value: 'coord-wa' },
   ];
 }
 
+function renderEnvases(producto) {
+  const contenedor = document.getElementById('product-envases');
+  const block = document.getElementById('product-envase-block');
+  if (!contenedor || !block) return;
+
+  const opciones = obtenerOpcionesEnvase(producto);
+
+  if (!opciones.length) {
+    block.hidden = true;
+    contenedor.innerHTML = '';
+    state.selectedEnvase = null;
+    updatePersonalizacionResumen(producto);
+    return;
+  }
+
+  block.hidden = false;
+  contenedor.innerHTML = '';
+  opciones.forEach((op, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = `chip chip-envase${i === 0 ? ' selected' : ''}`;
+    btn.dataset.value = op.value;
+    btn.textContent = op.label;
+    btn.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+    btn.setAttribute('role', 'radio');
+    contenedor.appendChild(btn);
+  });
+
+  state.selectedEnvase = opciones[0];
+
+  contenedor.onclick = (e) => {
+    const chip = e.target.closest('.chip-envase');
+    if (!chip) return;
+    contenedor.querySelectorAll('.chip-envase').forEach((c) => {
+      c.classList.remove('selected');
+      c.setAttribute('aria-pressed', 'false');
+    });
+    chip.classList.add('selected');
+    chip.setAttribute('aria-pressed', 'true');
+    state.selectedEnvase = opciones.find((o) => o.value === chip.dataset.value) || null;
+    updatePersonalizacionResumen(state.producto);
+    scheduleCloseDetails(detailsByAcc('envase'));
+  };
+
+  updatePersonalizacionResumen(state.producto);
+}
+
+function renderDietChips() {
+  const contenedor = document.getElementById('diet-chips');
+  if (!contenedor) return;
+
+  state.dietSelected = new Set();
+  contenedor.innerHTML = '';
+
+  DIET_OPCIONES.forEach((d) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'chip chip-diet';
+    btn.dataset.dietId = d.id;
+    btn.textContent = d.label;
+    btn.setAttribute('aria-pressed', 'false');
+    contenedor.appendChild(btn);
+  });
+
+  contenedor.onclick = (e) => {
+    const chip = e.target.closest('.chip-diet');
+    if (!chip) return;
+    const id = chip.dataset.dietId;
+    const opt = DIET_OPCIONES.find((x) => x.id === id);
+    if (!opt) return;
+
+    if (state.dietSelected.has(opt.label)) {
+      state.dietSelected.delete(opt.label);
+      chip.classList.remove('selected');
+      chip.setAttribute('aria-pressed', 'false');
+    } else {
+      state.dietSelected.add(opt.label);
+      chip.classList.add('selected');
+      chip.setAttribute('aria-pressed', 'true');
+    }
+    updatePersonalizacionResumen(state.producto);
+    scheduleDietAccordionClose();
+  };
+}
+
 function buildMensajePedido(producto) {
-  const cantidad = getCantidad();
-  const precio =
+  const x = getFormExtras();
+  const precioUnit =
     state.selectedTalla && state.selectedTalla.precio !== null && state.selectedTalla.precio !== undefined
-      ? `$${Number(state.selectedTalla.precio).toFixed(2)} c/u`
+      ? `$${Number(state.selectedTalla.precio).toFixed(2)}`
       : 'A consultar';
 
-  const opcionTexto = sanitizePlainText(
-    state.selectedOpcion ? state.selectedOpcion.label : 'Sin variante'
-  );
-  const notasRaw = (document.getElementById('product-notas')?.value || '').trim();
-  const notas = sanitizePlainText(notasRaw);
-  const notasLine = notas ? `\n- Notas: ${notas}` : '';
-
-  const tallaLine = state.selectedTalla
-    ? `${sanitizePlainText(state.selectedTalla.label)} (${precio})`
+  const saborTxt = state.selectedSabor ? state.selectedSabor.label : '—';
+  const envaseTxt = state.selectedEnvase ? state.selectedEnvase.label : '—';
+  const tallaTxt = state.selectedTalla
+    ? `${state.selectedTalla.label} (${state.selectedTalla.desc || 'porciones'}) — ${precioUnit}`
     : 'A definir';
 
-  const nombreProd = sanitizePlainText(producto.nombre);
-  const catProd = sanitizePlainText(producto.categoria);
+  const dietas =
+    state.dietSelected.size > 0 ? [...state.dietSelected].join(', ') : 'Ninguna indicada';
 
-  return [
+  const line = (label, val) => (val ? `\n- ${label}: ${val}` : '');
+
+  const msg = [
     "Hola Paula's Desserts!",
-    'Quiero pedir / personalizar:',
-    `- Producto: ${nombreProd} (${catProd})`,
-    `- Cantidad: ${cantidad}`,
-    `- Tamaño / presentación: ${tallaLine}`,
-    `- Opción (sabor / estilo): ${opcionTexto}`,
-    notasLine,
     '',
-    '(Mensaje generado desde la web — puedes editarlo antes de enviar)',
+    '=== PERSONALIZACIÓN DE PEDIDO ===',
+    `- Tipo de producto: ${producto.nombre} (${producto.categoria})`,
+    `- Cantidad de unidades: ${x.cantidad}`,
+    `- Tamaño / porciones: ${tallaTxt}`,
+    `- Sabor: ${saborTxt}`,
+    `- Empaque / presentación: ${envaseTxt}`,
+    line('Tema o diseño', x.tema),
+    line('Colores', x.colores),
+    line('Texto personalizado', x.texto),
+    '',
+    `- Entrega: ${ENTREGA_LABEL[x.entrega] || x.entrega}`,
+    '',
+    `- Preferencias dietéticas: ${dietas}`,
+    line('Extras u otras notas', x.notasExtra),
+    '',
+    '(Generado desde la web — podés editar antes de enviar)',
   ].join('\n');
+
+  return msg;
 }
 
 function updatePersonalizacionResumen(producto) {
   const resumenEl = document.getElementById('product-personalizacion-resumen');
   const wa = document.getElementById('btn-whatsapp');
+  updateAccordionPreviews();
   if (!resumenEl || !producto) return;
 
   if (!state.selectedTalla) {
-    resumenEl.textContent = 'Selecciona un tamaño o consulta disponibilidad.';
+    resumenEl.textContent = 'Elegí un tamaño / porciones para ver el precio.';
     if (wa) wa.setAttribute('href', '#');
     return;
   }
 
+  const x = getFormExtras();
   const precio =
     state.selectedTalla.precio !== null && state.selectedTalla.precio !== undefined
       ? `$${Number(state.selectedTalla.precio).toFixed(2)}`
       : 'A consultar';
 
-  const opcionTexto = state.selectedOpcion ? state.selectedOpcion.label : 'Sin variante';
-  const notas = (document.getElementById('product-notas')?.value || '').trim();
-  const notasPart = notas ? ` · Notas: «${notas.slice(0, 80)}${notas.length > 80 ? '…' : ''}»` : '';
-  const cantidad = getCantidad();
+  const sabor = state.selectedSabor ? state.selectedSabor.label : '—';
+  const dietas = state.dietSelected.size ? [...state.dietSelected].join(' · ') : '—';
 
-  resumenEl.textContent = `Tu selección: ${cantidad}× ${producto.nombre} · ${opcionTexto} · ${state.selectedTalla.label} · ${precio}${notasPart}`;
+  resumenEl.textContent = `${x.cantidad}× ${producto.nombre} · ${state.selectedTalla.label} (${precio}) · Sabor: ${sabor} · Dietas: ${dietas}`;
 
   if (wa) {
     wa.href = `https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(buildMensajePedido(producto))}`;
@@ -488,19 +642,17 @@ async function guardarPersonalizacion(producto) {
   if (!state.selectedTalla) return;
 
   const mensaje = buildMensajePedido(producto);
-
   if (btn) btn.disabled = true;
 
   try {
     await navigator.clipboard.writeText(mensaje);
     if (resumenEl) {
-      resumenEl.textContent =
-        'Listo: copiamos tu pedido al portapapeles. Pégalo en WhatsApp o envía con el botón verde.';
+      resumenEl.textContent = 'Listo: copiamos el pedido al portapapeles.';
     }
   } catch {
     window.prompt('Copia tu solicitud:', mensaje);
     if (resumenEl) {
-      resumenEl.textContent = 'Selección lista. Si no se copió sola, copia desde el cuadro que apareció.';
+      resumenEl.textContent = 'Copiá el texto desde el cuadro que apareció.';
     }
   }
 
@@ -551,11 +703,9 @@ function mostrarError(msg) {
   if (!hero) return;
   hero.innerHTML = `
     <div class="product-error" style="grid-column:1/-1;text-align:center;padding:60px 20px;">
-      <p class="product-error-msg" style="font-size:17px;color:var(--color-primary);opacity:0.9;font-family:var(--font-body);max-width:46ch;margin:0 auto 20px;line-height:1.55;"></p>
+      <p style="font-size:17px;color:var(--color-primary);opacity:0.9;font-family:var(--font-body);max-width:46ch;margin:0 auto 20px;line-height:1.55;">${msg}</p>
       <p style="margin:0 0 12px;"><a href="Menu.html" style="color:var(--color-primary);font-size:15px;font-weight:700;font-family:var(--font-body);">← Volver al menú</a></p>
       <p style="margin:0;"><a href="Producto.html" style="color:var(--color-primary);font-size:14px;font-weight:600;font-family:var(--font-body);">Ver todos los productos</a></p>
     </div>
   `;
-  const msgEl = hero.querySelector('.product-error-msg');
-  if (msgEl) msgEl.textContent = msg;
 }
