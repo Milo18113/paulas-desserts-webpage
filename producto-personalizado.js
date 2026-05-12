@@ -538,8 +538,6 @@ function buildMensajePedido(producto) {
     '',
     `- Preferencias dietéticas: ${dietas}`,
     line('Extras u otras notas', x.notasExtra),
-    '',
-    '(Generado desde la web — podés editar antes de enviar)',
   ].join('\n');
 
   return msg;

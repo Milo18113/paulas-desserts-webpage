@@ -464,8 +464,6 @@ function buildMensajePedido(producto) {
     '',
     `- Entrega: ${ENTREGA_LABEL[x.entrega] || x.entrega}`,
     line('Extras u otras notas', x.notasExtra),
-    '',
-    '(Generado desde la web — podés editar antes de enviar)',
   ].join('\n');
 
   return msg;
