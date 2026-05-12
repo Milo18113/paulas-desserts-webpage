@@ -1,10 +1,10 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    productstyles.css — Página de producto / personalización
    Tokens: DESIGN.md vía variables en styles.css (:root).
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   Base de página (solo Producto.html carga este archivo)
+   Base de página (solo producto.html carga este archivo)
    -------------------------------------------------------------------------- */
 
 body.product-page {

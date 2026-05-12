@@ -1,4 +1,4 @@
-# DESIGN.md — Paula's Desserts
+﻿# DESIGN.md — Paula's Desserts
 
 Sistema de diseño del proyecto. Este archivo es la fuente de verdad para tokens de color, tipografía, componentes compartidos y convenciones visuales. Cualquier cambio global se decide aquí primero y luego se refleja en `styles.css`.
 
@@ -31,7 +31,7 @@ Sistema de diseño del proyecto. Este archivo es la fuente de verdad para tokens
 
 ## Header y Footer
 
-El header y footer de **todas las páginas** sigue el estilo de `SobreNosotros.html` / `stylesHomepage.css`:
+El header y footer de **todas las páginas** sigue el estilo de `sobre_nosotros.html` / `stylesHomepage.css`:
 - Fondo `--color-bg` (crema), borde inferior sutil
 - Logo (ícono) + nombre "Paula's Desserts" en Handelson a la izquierda
 - Nav links en `--font-body`, uppercase, `--color-primary`, a la derecha
@@ -40,7 +40,7 @@ El header y footer de **todas las páginas** sigue el estilo de `SobreNosotros.h
 - Desktop: logo y links en la misma fila, separados
 - `≤ 760px`: padding horizontal se reduce a `20px`; si los links no caben, se pasan a segunda línea o se colapsan
 
-El footer también sigue el estilo de `SobreNosotros.html`: fondo `--color-bg`, línea de dashes a los lados del logo centrado.
+El footer también sigue el estilo de `sobre_nosotros.html`: fondo `--color-bg`, línea de dashes a los lados del logo centrado.
 
 ---
 
@@ -52,10 +52,10 @@ Todos los botones del proyecto y su estilo esperado:
 |-------|-----------|-----------|--------|
 | **"PERSONALIZA AHORA"** (hero CTA) | `index.html` | CTA principal del landing, lleva a personalización | Fondo `--color-bg`, texto `--color-primary`, borde `--color-bg`, `border-radius: 11px`. Hover: invierte colores. |
 | **"¡Personalizar!"** (nav CTA) | `Catalogo.html` | Acceso rápido a personalización desde la nav | Fondo `--color-primary`, texto `--color-bg`, `border-radius: 4px`, padding pequeño. |
-| **"Personaliza tu postre"** (debajo de imagen) | `Producto.html` | CTA secundario en página de producto | Fondo `--color-accent`, texto `--color-primary`, ancho completo, sin border-radius. |
-| **"Guardar"** (btn-primary) | `Producto.html` | Confirmar selección de tamaño/opciones | Fondo `--color-primary`, texto `--color-bg`, sin border-radius. |
-| **Size cards** (Pequeño / Mediano / Grande) | `Producto.html` | Selector de tamaño de producto | Borde `--color-primary` con opacidad, sin fondo. Seleccionado/hover: fondo `--color-primary`, texto `--color-bg`. |
-| **Chips de opción** | `Producto.html` (personalización) | Selección de variantes del producto | Borde pill (`border-radius: 20px`), sin fondo. Seleccionado/hover: fondo `--color-primary`, texto `--color-bg`. |
+| **"Personaliza tu postre"** (debajo de imagen) | `producto.html` | CTA secundario en página de producto | Fondo `--color-accent`, texto `--color-primary`, ancho completo, sin border-radius. |
+| **"Guardar"** (btn-primary) | `producto.html` | Confirmar selección de tamaño/opciones | Fondo `--color-primary`, texto `--color-bg`, sin border-radius. |
+| **Size cards** (Pequeño / Mediano / Grande) | `producto.html` | Selector de tamaño de producto | Borde `--color-primary` con opacidad, sin fondo. Seleccionado/hover: fondo `--color-primary`, texto `--color-bg`. |
+| **Chips de opción** | `producto.html` (personalización) | Selección de variantes del producto | Borde pill (`border-radius: 20px`), sin fondo. Seleccionado/hover: fondo `--color-primary`, texto `--color-bg`. |
 
 **Regla general:** `--color-accent` es exclusivo para el CTA de personalización. Los demás botones alternan entre `--color-primary` sólido y outlined.
 
@@ -110,8 +110,8 @@ Lo que sí es consistente:
 
 Páginas que ya usan `styles.css` correctamente:
 - `index.html` ✅
-- `SobreNosotros.html` ✅
+- `sobre_nosotros.html` ✅
 
 Páginas con estilos inline pendientes de migrar a `styles.css`:
 - `Catalogo.html` — pendiente de Agustina
-- `Producto.html` — pendiente de Milo
+- `producto.html` — pendiente de Milo

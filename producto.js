@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Página de producto del catálogo clásico (sin personalización profunda).
  * Catálogo: fetch(catalogo.json) en http(s), o window.__PD_CATALOGO desde catalogo.embed.js (file://).
  */
@@ -38,7 +38,7 @@ async function loadCatalogo() {
     catalogo = await loadCatalogo();
   } catch {
     mostrarError(
-      'No se pudo cargar el catálogo. En <code>Producto.html</code>, incluye <code>&lt;script src=&quot;catalogo.embed.js&quot;&gt;&lt;/script&gt;</code> <strong>antes</strong> de <code>producto.js</code>, o abre el sitio con un servidor (por ejemplo <code>npx serve .</code>).'
+      'No se pudo cargar el catálogo. En <code>producto.html</code>, incluye <code>&lt;script src=&quot;catalogo.embed.js&quot;&gt;&lt;/script&gt;</code> <strong>antes</strong> de <code>producto.js</code>, o abre el sitio con un servidor (por ejemplo <code>npx serve .</code>).'
     );
     return;
   }
@@ -542,7 +542,7 @@ function renderRelacionados(ids, catalogo) {
     grid.insertAdjacentHTML(
       'beforeend',
       `
-      <a href="Producto.html?id=${encodeURIComponent(p.id)}" class="polaroid">
+      <a href="producto.html?id=${encodeURIComponent(p.id)}" class="polaroid">
         ${imgHtml}
         <div class="polaroid-label">
           <div class="product-name">${escapeHtml(p.nombre)}</div>

@@ -1,4 +1,4 @@
-/** Copia de catalogo.json para abrir Producto.html con file:// (sin servidor). En http(s) se intenta cargar catalogo.json primero. */
+﻿/** Copia de catalogo.json para abrir producto.html con file:// (sin servidor). En http(s) se intenta cargar catalogo.json primero. */
 window.__PD_CATALOGO = [
   {
     "id": "pie-de-limon",

@@ -1,4 +1,4 @@
-const CATEGORIAS_PRINCIPALES = ['Pasteles', 'Cupcakes', 'Galletas'];
+﻿const CATEGORIAS_PRINCIPALES = ['Pasteles', 'Cupcakes', 'Galletas'];
 
 const EMOJI_POR_CATEGORIA = {
   Pasteles: '🎂',
@@ -42,7 +42,7 @@ function buildCard(p) {
   const baseId = CATALOGO_TO_BASE[p.id];
   const href = baseId
     ? `producto_personalizado.html?base=${encodeURIComponent(baseId)}`
-    : `Producto.html?id=${encodeURIComponent(p.id)}`;
+    : `producto.html?id=${encodeURIComponent(p.id)}`;
 
   return `
     <a href="${href}" class="polaroid" style="text-decoration:none;color:inherit;cursor:pointer;">
