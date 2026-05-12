@@ -89,7 +89,7 @@
     "nombre": "Galletas de Azúcar Decoradas",
     "categoria": "Galletas",
     "descripcion": "Suaves galletas de mantequillas con diseños personalizables",
-    "image": null,
+    "image": "Paula's_Desserts/Galletas.png",
     "alergenos": ["Gluten", "Lácteos"],
     "tallas": [
       { "label": "Único", "desc": "12 galletas", "precio": 12 }
@@ -101,7 +101,7 @@
     "nombre": "Cookie Box Pequeña",
     "categoria": "Galletas",
     "descripcion": "Mix de galletas: s'mores, double chocolate, oreo, chocochip y funfetti.",
-    "image": null,
+    "image": "Paula's_Desserts/smallbox.jpg",
     "alergenos": ["Gluten", "Lácteos", "Nueces"],
     "tallas": [
       { "label": "Único", "desc": "8 galletas", "precio": 8.50 }
