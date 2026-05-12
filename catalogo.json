@@ -122,11 +122,24 @@
     "relacionados": ["strawberry-cupcakes", "cookie-box-pequena", "banana-bread"]
   },
   {
+    "id": "lemon-cupcakes",
+    "nombre": "Lemon Cupcakes",
+    "categoria": "Cupcakes",
+    "descripcion": "Cupcakes de vainilla, trozos de limón, y buttercream de merengue suizo.",
+    "image": "assets/productos/lemon-cupcakes.jpg",
+    "alergenos": ["Gluten", "Lácteos"],
+    "tallas": [
+      { "label": "6 cupcakes", "desc": "6 cupcakes", "precio": 12 },
+      { "label": "12 cupcakes", "desc": "12 cupcakes", "precio": 20 }
+    ],
+    "relacionados": ["cupcakes-caja", "cookie-box-pequena", "banana-bread"]
+  },
+  {
     "id": "strawberry-cupcakes",
     "nombre": "Strawberry Cupcakes",
     "categoria": "Cupcakes",
-    "descripcion": "Cupcakes de vainilla, trozos de frutilla, mermelada de frutilla y buttercream de merengue suizo.",
-    "image": "assets/productos/strawberry-cupcakes.jpg",
+    "descripcion": "Cupcakes de vainilla, trozos de fresa, y buttercream de merengue suizo.",
+    "image": "assets/productos/strawberry-cupackes.jpg",
     "alergenos": ["Gluten", "Lácteos"],
     "tallas": [
       { "label": "6 cupcakes", "desc": "6 cupcakes", "precio": 12 },
@@ -153,7 +166,7 @@
     "nombre": "Lunch Box Cake",
     "categoria": "Pasteles",
     "descripcion": "Pastel personalizado (sabor, relleno y decoración a tu elección).",
-    "image": null,
+    "image": "uploads/lunchboxcake.jpg",
     "alergenos": ["Gluten", "Lácteos"],
     "tallas": [
       { "label": "Único", "desc": "4 porciones", "precio": 10 }
@@ -163,9 +176,9 @@
   {
     "id": "pasteles-personalizados",
     "nombre": "Pasteles Personalizados",
-    "categoria": "Personalizados",
+    "categoria": "Pasteles",
     "descripcion": "Pasteles completamente personalizados — sabor, relleno, tamaño y decoración según tu visión.",
-    "image": null,
+    "image": "uploads/collagepersonalizar.png",
     "alergenos": [],
     "tallas": [
       { "label": "A consultar", "desc": "Precio según especificaciones", "precio": null }
