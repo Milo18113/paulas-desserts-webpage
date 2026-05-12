@@ -352,6 +352,16 @@ body.product-page .dropbtn {
   max-width: 52ch;
 }
 
+/* Sección de formulario plana (sin acordeón) */
+.form-section {
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(var(--primary-blue-rgb), 0.12);
+}
+
+.form-section:last-of-type {
+  border-bottom: none;
+}
+
 /* Tipo de producto (compacto, sin acordeón) */
 .form-strip {
   margin: 0;
@@ -646,13 +656,22 @@ body.product-page .dropbtn {
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  padding-top: 4px;
+  padding: 14px 0;
 }
 
 .price-block {
   display: flex;
   flex-direction: column;
   gap: 2px;
+}
+
+.price-label {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  color: var(--color-secondary);
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .price {
@@ -815,6 +834,7 @@ body.product-page .dropbtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   padding: 14px 22px;
   background: #25d366;
   color: #fff !important;

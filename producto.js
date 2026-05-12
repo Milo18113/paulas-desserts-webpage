@@ -1,11 +1,10 @@
-﻿/**
- * Página de producto del catálogo clásico (sin personalización profunda).
+/**
+ * Página de producto del catálogo clásico.
  * Catálogo: fetch(catalogo.json) en http(s), o window.__PD_CATALOGO desde catalogo.embed.js (file://).
  */
 
 const WHATSAPP_NUM = '593980191040';
 
-// id del placeholder del catálogo que dispara la experiencia "A consultar"
 const PERSONALIZADO_PLACEHOLDER_ID = 'pasteles-personalizados';
 
 const state = {
@@ -61,7 +60,6 @@ async function loadCatalogo() {
 })();
 
 
-// Mapeo de categoría a página del menú para el breadcrumb.
 function categoriaToHref(categoria) {
   const c = (categoria || '').toLowerCase();
   if (c.includes('pastel')) return 'pasteles.html';
@@ -125,9 +123,6 @@ function poblarPagina(producto, catalogo) {
       ? producto.alergenos.map((a) => `<li>${escapeHtml(a)}</li>`).join('')
       : '<li>Sin alérgenos declarados en ficha</li>';
 
-  const tipoLine = document.getElementById('product-tipo-line');
-  if (tipoLine) tipoLine.textContent = `${producto.nombre} · ${producto.categoria}`;
-
   const esConsulta = producto.id === PERSONALIZADO_PLACEHOLDER_ID;
   aplicarModoConsulta(esConsulta);
 
@@ -135,43 +130,26 @@ function poblarPagina(producto, catalogo) {
     renderTallas(producto.tallas);
     renderEnvases(producto);
 
-    const panel = document.getElementById('product-personalizacion');
-    const sync = () => updatePersonalizacionResumen(producto);
-    if (panel) {
-      initAccordionBlurOnce(panel);
-      panel.addEventListener('input', sync);
-      panel.addEventListener('change', (e) => {
-        sync();
-        onPanelAccordionChange(e.target);
-      });
-    }
+    document.getElementById('product-personalizacion')
+      ?.addEventListener('change', () => actualizarWhatsApp(producto));
+    document.getElementById('product-personalizacion')
+      ?.addEventListener('input', () => actualizarWhatsApp(producto));
 
-    const btnGuardar = document.getElementById('btn-guardar');
-    if (btnGuardar) {
-      btnGuardar.addEventListener('click', () => guardarPersonalizacion(producto));
-    }
+    document.getElementById('btn-guardar')
+      ?.addEventListener('click', () => guardarPedido(producto));
 
-    updatePersonalizacionResumen(producto);
+    actualizarWhatsApp(producto);
   }
 
   renderRelacionados(producto.relacionados || [], catalogo);
 }
 
-// Oculta acordeones/precio/CTAs y muestra el bloque "A consultar" — solo para el placeholder del catálogo.
 function aplicarModoConsulta(activo) {
   const consultaBlock = document.getElementById('product-consulta-block');
   if (consultaBlock) consultaBlock.hidden = !activo;
 
-  const selectores = [
-    '#product-personalizacion .form-strip',
-    '#product-personalizacion details.form-accordion',
-    '#product-personalizacion .cta-row',
-    '#product-personalizacion-resumen',
-  ];
-  selectores.forEach((sel) => {
-    document.querySelectorAll(sel).forEach((el) => {
-      el.hidden = activo;
-    });
+  ['#product-personalizacion .form-section', '#product-personalizacion .cta-row'].forEach((sel) => {
+    document.querySelectorAll(sel).forEach((el) => { el.hidden = activo; });
   });
 }
 
@@ -183,24 +161,9 @@ function escapeHtml(s) {
     .replace(/"/g, '&quot;');
 }
 
-function getCantidad() {
-  const el = document.getElementById('product-cantidad');
-  const n = parseInt(el && el.value, 10);
-  if (Number.isNaN(n) || n < 1) return 1;
-  return Math.min(99, n);
-}
-
 function val(id) {
   const el = document.getElementById(id);
   return el && 'value' in el ? String(el.value || '').trim() : '';
-}
-
-function getFormExtras() {
-  return {
-    cantidad: getCantidad(),
-    entrega: val('field-entrega') || 'coord',
-    notasExtra: val('field-notas-extra'),
-  };
 }
 
 const ENTREGA_LABEL = {
@@ -209,76 +172,9 @@ const ENTREGA_LABEL = {
   coord: 'A coordinar',
 };
 
-function clipPreview(s, max = 44) {
-  const t = String(s || '').trim();
-  if (!t) return '';
-  return t.length <= max ? t : `${t.slice(0, max - 1)}…`;
-}
-
-function setAccordionPreviewText(id, text) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = text;
-}
-
-function scheduleCloseDetails(det) {
-  if (!det || typeof det.matches !== 'function' || !det.matches('details.form-accordion')) return;
-  clearTimeout(det._accCloseT);
-  det._accCloseT = setTimeout(() => {
-    det.open = false;
-  }, 420);
-}
-
-function detailsByAcc(name) {
-  return document.querySelector(`details.form-accordion[data-acc="${name}"]`);
-}
-
-function updateAccordionPreviews() {
-  const x = getFormExtras();
-
-  const t = state.selectedTalla;
-  setAccordionPreviewText('acc-preview-talla', t ? t.label : '…');
-
-  setAccordionPreviewText('acc-preview-entrega', ENTREGA_LABEL[x.entrega] || '…');
-
-  const envBlock = document.getElementById('product-envase-block');
-  if (envBlock && envBlock.hidden) {
-    setAccordionPreviewText('acc-preview-envase', '—');
-  } else {
-    setAccordionPreviewText('acc-preview-envase', state.selectedEnvase ? state.selectedEnvase.label : '…');
-  }
-
-  setAccordionPreviewText('acc-preview-notas', clipPreview(x.notasExtra) || 'Sin notas');
-}
-
-function onPanelAccordionChange(target) {
-  if (!target || !target.id) return;
-  if (target.id === 'field-entrega') {
-    const det = target.closest('details.form-accordion');
-    if (det) scheduleCloseDetails(det);
-  }
-}
-
-function initAccordionBlurOnce(panel) {
-  if (!panel || panel.dataset.accBlur === '1') return;
-  panel.dataset.accBlur = '1';
-  const textFieldIds = new Set(['field-notas-extra']);
-  panel.addEventListener(
-    'blur',
-    (e) => {
-      const t = e.target;
-      if (!t || !textFieldIds.has(t.id)) return;
-      const det = t.closest('details.form-accordion');
-      if (det) scheduleCloseDetails(det);
-    },
-    true
-  );
-}
-
 function renderTallas(tallas) {
   const contenedor = document.getElementById('product-tallas');
   const precioEl = document.getElementById('product-price');
-  const noteEl = document.getElementById('product-price-note');
-
   const tallasCopy = tallas && tallas.length ? tallas : null;
 
   const setSelectedTalla = (talla, index) => {
@@ -287,25 +183,17 @@ function renderTallas(tallas) {
       talla.precio !== null && talla.precio !== undefined
         ? `$${Number(talla.precio).toFixed(2)}`
         : 'A consultar';
-    if (noteEl) {
-      noteEl.textContent =
-        !tallasCopy || tallasCopy.length <= 1
-          ? 'Precio según la presentación elegida (porciones ≈ personas).'
-          : 'El precio cambia según el tamaño / porciones.';
-    }
     contenedor.querySelectorAll('.size-card').forEach((c, j) => {
       c.classList.toggle('selected', j === index);
       c.setAttribute('aria-checked', j === index ? 'true' : 'false');
       c.tabIndex = j === index ? 0 : -1;
     });
-    updatePersonalizacionResumen(state.producto);
+    actualizarWhatsApp(state.producto);
   };
 
   if (!tallasCopy) {
-    contenedor.innerHTML =
-      '<p class="custom-hint">Consulta tamaños y precios por WhatsApp o en tienda.</p>';
+    contenedor.innerHTML = '<p class="custom-hint">Consulta tamaños y precios por WhatsApp o en tienda.</p>';
     precioEl.textContent = '—';
-    if (noteEl) noteEl.textContent = '';
     state.selectedTalla = null;
     return;
   }
@@ -316,8 +204,7 @@ function renderTallas(tallas) {
     <div class="size-card${i === 0 ? ' selected' : ''}" role="radio" aria-checked="${i === 0}" tabindex="${i === 0 ? 0 : -1}" data-index="${i}">
       <span class="size-label">${escapeHtml(t.label)}</span>
       <span class="size-desc">${escapeHtml(t.desc || '')}</span>
-    </div>
-  `
+    </div>`
     )
     .join('');
 
@@ -326,9 +213,7 @@ function renderTallas(tallas) {
   contenedor.onclick = (e) => {
     const card = e.target.closest('.size-card');
     if (!card) return;
-    const idx = Number(card.dataset.index);
-    setSelectedTalla(tallasCopy[idx], idx);
-    scheduleCloseDetails(detailsByAcc('talla'));
+    setSelectedTalla(tallasCopy[Number(card.dataset.index)], Number(card.dataset.index));
   };
 
   contenedor.onkeydown = (e) => {
@@ -339,20 +224,16 @@ function renderTallas(tallas) {
       const next = Math.min(cards.length - 1, current + 1);
       setSelectedTalla(tallasCopy[next], next);
       cards[next]?.focus();
-      scheduleCloseDetails(detailsByAcc('talla'));
     } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
       e.preventDefault();
       const prev = Math.max(0, current - 1);
       setSelectedTalla(tallasCopy[prev], prev);
       cards[prev]?.focus();
-      scheduleCloseDetails(detailsByAcc('talla'));
     } else if (e.key === 'Enter' || e.key === ' ') {
       const card = e.target.closest('.size-card');
       if (card) {
         e.preventDefault();
-        const idx = Number(card.dataset.index);
-        setSelectedTalla(tallasCopy[idx], idx);
-        scheduleCloseDetails(detailsByAcc('talla'));
+        setSelectedTalla(tallasCopy[Number(card.dataset.index)], Number(card.dataset.index));
       }
     }
   };
@@ -401,9 +282,7 @@ function renderEnvases(producto) {
 
   if (!opciones.length) {
     block.hidden = true;
-    contenedor.innerHTML = '';
     state.selectedEnvase = null;
-    updatePersonalizacionResumen(producto);
     return;
   }
 
@@ -432,92 +311,59 @@ function renderEnvases(producto) {
     chip.classList.add('selected');
     chip.setAttribute('aria-pressed', 'true');
     state.selectedEnvase = opciones.find((o) => o.value === chip.dataset.value) || null;
-    updatePersonalizacionResumen(state.producto);
-    scheduleCloseDetails(detailsByAcc('envase'));
+    actualizarWhatsApp(state.producto);
   };
-
-  updatePersonalizacionResumen(state.producto);
 }
 
 function buildMensajePedido(producto) {
-  const x = getFormExtras();
+  const entrega = val('field-entrega') || 'coord';
+  const notasExtra = val('field-notas-extra');
+
   const precioUnit =
     state.selectedTalla && state.selectedTalla.precio !== null && state.selectedTalla.precio !== undefined
       ? `$${Number(state.selectedTalla.precio).toFixed(2)}`
       : 'A consultar';
 
-  const envaseTxt = state.selectedEnvase ? state.selectedEnvase.label : '—';
   const tallaTxt = state.selectedTalla
     ? `${state.selectedTalla.label} (${state.selectedTalla.desc || 'porciones'}) — ${precioUnit}`
     : 'A definir';
 
-  const line = (label, val) => (val ? `\n- ${label}: ${val}` : '');
+  const envaseTxt = state.selectedEnvase ? state.selectedEnvase.label : '—';
+  const line = (label, v) => (v ? `\n- ${label}: ${v}` : '');
 
-  const msg = [
+  return [
     "Hola Paula's Desserts!",
     '',
     '=== PEDIDO ===',
     `- Producto: ${producto.nombre} (${producto.categoria})`,
-    `- Cantidad de unidades: ${x.cantidad}`,
     `- Tamaño / porciones: ${tallaTxt}`,
     `- Empaque / presentación: ${envaseTxt}`,
     '',
-    `- Entrega: ${ENTREGA_LABEL[x.entrega] || x.entrega}`,
-    line('Extras u otras notas', x.notasExtra),
+    `- Entrega: ${ENTREGA_LABEL[entrega] || entrega}`,
+    line('Extras u otras notas', notasExtra),
+    '',
+    '(Generado desde la web — podés editar antes de enviar)',
   ].join('\n');
-
-  return msg;
 }
 
-function updatePersonalizacionResumen(producto) {
-  const resumenEl = document.getElementById('product-personalizacion-resumen');
+function actualizarWhatsApp(producto) {
   const wa = document.getElementById('btn-whatsapp');
-  updateAccordionPreviews();
-  if (!resumenEl || !producto) return;
-
-  if (!state.selectedTalla) {
-    resumenEl.textContent = 'Elegí un tamaño / porciones para ver el precio.';
-    if (wa) wa.setAttribute('href', '#');
-    return;
-  }
-
-  const x = getFormExtras();
-  const precio =
-    state.selectedTalla.precio !== null && state.selectedTalla.precio !== undefined
-      ? `$${Number(state.selectedTalla.precio).toFixed(2)}`
-      : 'A consultar';
-
-  resumenEl.textContent = `${x.cantidad}× ${producto.nombre} · ${state.selectedTalla.label} (${precio})`;
-
-  if (wa) {
-    wa.href = `https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(buildMensajePedido(producto))}`;
-  }
+  if (!wa || !producto) return;
+  wa.href = `https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(buildMensajePedido(producto))}`;
 }
 
-async function guardarPersonalizacion(producto) {
-  const resumenEl = document.getElementById('product-personalizacion-resumen');
+async function guardarPedido(producto) {
   const btn = document.getElementById('btn-guardar');
-  if (!state.selectedTalla) return;
-
   const mensaje = buildMensajePedido(producto);
   if (btn) btn.disabled = true;
 
   try {
     await navigator.clipboard.writeText(mensaje);
-    if (resumenEl) {
-      resumenEl.textContent = 'Listo: copiamos el pedido al portapapeles.';
-    }
   } catch {
     window.prompt('Copia tu solicitud:', mensaje);
-    if (resumenEl) {
-      resumenEl.textContent = 'Copiá el texto desde el cuadro que apareció.';
-    }
   }
 
-  setTimeout(() => {
-    if (btn) btn.disabled = false;
-    updatePersonalizacionResumen(producto);
-  }, 1800);
+  setTimeout(() => { if (btn) btn.disabled = false; }, 1800);
 }
 
 function renderRelacionados(ids, catalogo) {
@@ -541,15 +387,13 @@ function renderRelacionados(ids, catalogo) {
 
     grid.insertAdjacentHTML(
       'beforeend',
-      `
-      <a href="producto.html?id=${encodeURIComponent(p.id)}" class="polaroid">
+      `<a href="producto.html?id=${encodeURIComponent(p.id)}" class="polaroid">
         ${imgHtml}
         <div class="polaroid-label">
           <div class="product-name">${escapeHtml(p.nombre)}</div>
           <div class="product-desc">${escapeHtml(p.categoria)} · ${escapeHtml(desc)}</div>
         </div>
-      </a>
-    `
+      </a>`
     );
   });
 }

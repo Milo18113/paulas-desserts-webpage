@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="productstyles.css" />
 </head>
@@ -69,11 +70,7 @@
 
       <hr class="divider" />
 
-      <section id="product-personalizacion" class="product-custom-panel" aria-labelledby="personalizacion-titulo">
-        <h2 id="personalizacion-titulo" class="custom-title custom-title--upper">TU PEDIDO</h2>
-        <p class="custom-hint custom-hint--compact">
-          Elegí el tamaño y la cantidad. Al final <strong>copia el texto</strong> o úsalo en <strong>WhatsApp</strong> para hacer tu pedido.
-        </p>
+      <section id="product-personalizacion">
 
         <div id="product-consulta-block" class="product-consulta-block" hidden>
           <p class="custom-hint">
@@ -82,82 +79,38 @@
           <a class="btn-primary" href="menu_personalizacion.html">Ir a personalización</a>
         </div>
 
-        <div class="form-strip">
-          <p class="form-block-title">Tipo de producto</p>
-          <p id="product-tipo-line" class="form-readonly" aria-live="polite"></p>
-          <div class="form-strip-qty">
-            <label for="product-cantidad" class="form-strip-qty-label">Unidades</label>
-            <input
-              type="number"
-              id="product-cantidad"
-              class="product-cantidad-input"
-              min="1"
-              max="99"
-              value="1"
-              inputmode="numeric"
-              aria-describedby="product-cantidad-hint"
-            />
-            <p id="product-cantidad-hint" class="custom-microhint custom-microhint--tight form-strip-qty-hint">
-              Ej.: 1 torta, 2 cajas de cupcakes.
-            </p>
-          </div>
+        <div class="form-section">
+          <p class="form-block-title">Tamaño / porciones</p>
+          <div class="size-options" id="product-tallas" role="radiogroup" aria-label="Tamaño o porciones"></div>
         </div>
 
-        <details class="form-accordion" data-acc="talla" open>
-          <summary class="form-accordion-summary">
-            <span class="form-accordion-title">Cantidad / tamaño (porciones)</span>
-            <span class="form-accordion-preview" id="acc-preview-talla"></span>
-          </summary>
-          <div class="form-accordion-body">
-            <p class="custom-microhint">Guía de porciones ≈ personas. El precio depende del tamaño elegido.</p>
-            <div class="size-options" id="product-tallas" role="radiogroup" aria-label="Tamaño o porciones"></div>
-          </div>
-        </details>
+        <div class="form-section">
+          <p class="form-block-title">Delivery / retiro</p>
+          <select id="field-entrega" class="product-field-select">
+            <option value="retiro">Retiro en local</option>
+            <option value="delivery">Delivery</option>
+            <option value="coord">A coordinar</option>
+          </select>
+        </div>
 
-        <details class="form-accordion" data-acc="entrega" open>
-          <summary class="form-accordion-summary">
-            <span class="form-accordion-title">Delivery / retiro</span>
-            <span class="form-accordion-preview" id="acc-preview-entrega"></span>
-          </summary>
-          <div class="form-accordion-body">
-            <select id="field-entrega" class="product-field-select">
-              <option value="retiro">Retiro en local</option>
-              <option value="delivery">Delivery</option>
-              <option value="coord">A coordinar</option>
-            </select>
-          </div>
-        </details>
+        <div class="form-section" id="product-envase-block">
+          <p class="form-block-title">Empaque / presentación</p>
+          <div id="product-envases" class="option-chips" role="radiogroup" aria-label="Empaque"></div>
+        </div>
 
-        <details class="form-accordion" data-acc="envase" open id="product-envase-block">
-          <summary class="form-accordion-summary">
-            <span class="form-accordion-title">Empaque / presentación</span>
-            <span class="form-accordion-preview" id="acc-preview-envase"></span>
-          </summary>
-          <div class="form-accordion-body">
-            <div id="product-envases" class="option-chips" role="radiogroup" aria-label="Empaque"></div>
-          </div>
-        </details>
-
-        <details class="form-accordion" data-acc="notas" open>
-          <summary class="form-accordion-summary">
-            <span class="form-accordion-title">Extras u otras notas</span>
-            <span class="form-accordion-preview" id="acc-preview-notas"></span>
-          </summary>
-          <div class="form-accordion-body">
-            <textarea id="field-notas-extra" class="product-field-text" rows="2" maxlength="400" placeholder="Cualquier otro detalle…"></textarea>
-          </div>
-        </details>
-
-        <p id="product-personalizacion-resumen" class="product-personalizacion-resumen" aria-live="polite"></p>
+        <div class="form-section">
+          <p class="form-block-title">Extras u otras notas</p>
+          <textarea id="field-notas-extra" class="product-field-text" rows="2" maxlength="400" placeholder="Cualquier otro detalle…"></textarea>
+        </div>
 
         <div class="cta-row">
           <div class="price-block">
+            <p class="form-block-title">Total</p>
             <div class="price" id="product-price">—</div>
-            <p id="product-price-note" class="price-note"></p>
           </div>
           <div class="cta-buttons">
             <button type="button" class="btn-primary" id="btn-guardar">Copiar pedido</button>
-            <a class="btn-whatsapp" id="btn-whatsapp" href="#" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a class="btn-whatsapp" id="btn-whatsapp" href="#" target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"></i>Enviar pedido</a>
           </div>
         </div>
       </section>
