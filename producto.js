@@ -88,7 +88,7 @@ function mostrarSelectorProductos(catalogo) {
   const breadcrumb = document.getElementById('breadcrumb-nav');
   if (breadcrumb) {
     breadcrumb.innerHTML =
-      '<a href="Menu.html">Menú</a><span class="breadcrumb-sep" aria-hidden="true">›</span><span class="breadcrumb-current">Elegir producto</span>';
+      '<span class="breadcrumb-current">Personalización</span>';
   }
 
   const related = document.getElementById('related-section');
@@ -704,7 +704,7 @@ function mostrarError(msg) {
   hero.innerHTML = `
     <div class="product-error" style="grid-column:1/-1;text-align:center;padding:60px 20px;">
       <p style="font-size:17px;color:var(--color-primary);opacity:0.9;font-family:var(--font-body);max-width:46ch;margin:0 auto 20px;line-height:1.55;">${msg}</p>
-      <p style="margin:0 0 12px;"><a href="Menu.html" style="color:var(--color-primary);font-size:15px;font-weight:700;font-family:var(--font-body);">← Volver al menú</a></p>
+      <p style="margin:0 0 12px;"><a href="Producto.html" style="color:var(--color-primary);font-size:15px;font-weight:700;font-family:var(--font-body);">← Volver a personalización</a></p>
       <p style="margin:0;"><a href="Producto.html" style="color:var(--color-primary);font-size:14px;font-weight:600;font-family:var(--font-body);">Ver todos los productos</a></p>
     </div>
   `;
