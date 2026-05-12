@@ -6,6 +6,19 @@
     "descripcion": "Diseña tu pastel desde cero: sabor, relleno, tamaño, tema y decoración a tu gusto.",
     "image": "uploads/cakepersonalizar.jpg",
     "alergenos": ["Gluten", "Lácteos"],
+    "saboresImagenes": {
+      "clasico":        "uploads/cakepersonalizar.jpg",
+      "chocolate":      "assets/productos/chocolate-lovers-cake.jpg",
+      "vainilla":       "uploads/lunchboxcake.jpg",
+      "red-velvet":     "uploads/collagepersonalizar.png",
+      "frutos-rojos":   "uploads/collagepersonalizar.png",
+      "limon":          "uploads/lunchboxcake.jpg",
+      "dulce-de-leche": "uploads/cakepersonalizar.jpg",
+      "cafe":           "uploads/cakepersonalizar.jpg",
+      "matcha":         "uploads/cakepersonalizar.jpg",
+      "sin-preferencia":"uploads/cakepersonalizar.jpg",
+      "otro":           "uploads/cakepersonalizar.jpg"
+    },
     "tallas": [
       { "label": "Pequeño", "desc": "6–8 porciones", "precio": null },
       { "label": "Mediano", "desc": "10–14 porciones", "precio": null },
@@ -19,6 +32,19 @@
     "descripcion": "Caja de cupcakes a tu medida: elige sabor, cobertura y decoración.",
     "image": "uploads/cupcakepersonalizar.jpg",
     "alergenos": ["Gluten", "Lácteos"],
+    "saboresImagenes": {
+      "clasico":        "uploads/cupcakepersonalizar.jpg",
+      "chocolate":      "uploads/cupcakepersonalizar.jpg",
+      "vainilla":       "uploads/cupcakepersonalizar.jpg",
+      "red-velvet":     "assets/productos/strawberry-cupackes.jpg",
+      "frutos-rojos":   "assets/productos/strawberry-cupackes.jpg",
+      "limon":          "assets/productos/cupcakes-caja.jpg",
+      "dulce-de-leche": "assets/productos/cupcakes-caja.jpg",
+      "cafe":           "assets/productos/cupcakes-caja.jpg",
+      "matcha":         "assets/productos/cupcakes-caja.jpg",
+      "sin-preferencia":"assets/productos/cupcakes-caja.jpg",
+      "otro":           "assets/productos/cupcakes-caja.jpg"
+    },
     "tallas": [
       { "label": "Caja x6", "desc": "6 cupcakes", "precio": null },
       { "label": "Caja x12", "desc": "12 cupcakes", "precio": null },
@@ -32,6 +58,19 @@
     "descripcion": "Galletas decoradas con tu tema, colores y mensaje.",
     "image": "uploads/galletaspersonalizar.jpg",
     "alergenos": ["Gluten", "Lácteos", "Puede contener nueces", "Puede contener alcohol"],
+    "saboresImagenes": {
+      "clasico":        "assets/productos/smallbox.jpg",
+      "chocolate":      "assets/productos/smallbox.jpg",
+      "vainilla":       "assets/productos/smallbox.jpg",
+      "red-velvet":     "assets/productos/smallbox.jpg",
+      "frutos-rojos":   "assets/productos/smallbox.jpg",
+      "limon":          "assets/productos/baileys-cookies.jpg",
+      "dulce-de-leche": "assets/productos/baileys-cookies.jpg",
+      "cafe":           "assets/productos/baileys-cookies.jpg",
+      "matcha":         "assets/productos/baileys-cookies.jpg",
+      "sin-preferencia":"assets/productos/baileys-cookies.jpg",
+      "otro":           "assets/productos/baileys-cookies.jpg"
+    },
     "tallas": [
       { "label": "Bolsa x6", "desc": "6 galletas", "precio": null },
       { "label": "Caja x12", "desc": "12 galletas", "precio": null },
@@ -45,6 +84,19 @@
     "descripcion": "Pie hecho a tu gusto: elige sabor, relleno y detalles.",
     "image": "assets/productos/pie-de-limon.jpg",
     "alergenos": ["Puede contener gluten", "Puede contener lácteos"],
+    "saboresImagenes": {
+      "clasico":        "assets/productos/pie-de-manzana.jpg",
+      "chocolate":      "assets/productos/pie-de-manzana.jpg",
+      "vainilla":       "assets/productos/pie-de-manzana.jpg",
+      "red-velvet":     "assets/productos/pie-de-manzana.jpg",
+      "frutos-rojos":   "assets/productos/pie-de-manzana.jpg",
+      "limon":          "assets/productos/pie-de-limon.jpg",
+      "dulce-de-leche": "assets/productos/pie-de-limon.jpg",
+      "cafe":           "assets/productos/pie-de-limon.jpg",
+      "matcha":         "assets/productos/pie-de-limon.jpg",
+      "sin-preferencia":"assets/productos/pie-de-limon.jpg",
+      "otro":           "assets/productos/pie-de-limon.jpg"
+    },
     "tallas": [
       { "label": "Pequeño", "desc": "6–8 porciones", "precio": null },
       { "label": "Mediano", "desc": "10–12 porciones", "precio": null }

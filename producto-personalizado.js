@@ -143,6 +143,7 @@ function poblarPagina(producto) {
   }
 
   updatePersonalizacionResumen(producto);
+  updatePreviewImage();
   initAccordionAnimations();
 }
 
@@ -198,20 +199,41 @@ function animateCloseDetails(det) {
   if (!det || !det.open || det.dataset.animating) return;
   const body = det.querySelector('.form-accordion-body');
   if (!body) { det.open = false; return; }
-  det.dataset.animating = '1';
+
+  // Limpiar estilos inline que pudo haber dejado una animación anterior incompleta
+  body.style.transition = '';
   const startH = body.scrollHeight;
+
+  // Si ya no hay contenido visible, cerrar directamente sin animar
+  if (startH === 0) {
+    body.style.height = '';
+    body.style.paddingBottom = '';
+    det.removeAttribute('open');
+    return;
+  }
+
+  det.dataset.animating = '1';
   body.style.height = startH + 'px';
   body.style.paddingBottom = '0';
-  requestAnimationFrame(() => {
-    body.style.transition = 'height 0.32s ease';
-    body.style.height = '0';
-  });
-  body.addEventListener('transitionend', () => {
+
+  const cleanup = () => {
     det.removeAttribute('open');
     body.style.height = '';
     body.style.transition = '';
     body.style.paddingBottom = '';
     delete det.dataset.animating;
+  };
+
+  requestAnimationFrame(() => {
+    body.style.transition = 'height 0.32s ease';
+    body.style.height = '0';
+  });
+
+  // Fallback por si transitionend no dispara
+  const fallback = setTimeout(cleanup, 400);
+  body.addEventListener('transitionend', () => {
+    clearTimeout(fallback);
+    cleanup();
   }, { once: true });
 }
 
@@ -234,6 +256,14 @@ function scheduleDietAccordionClose() {
     const det = detailsByAcc('diet');
     if (det) scheduleCloseDetails(det);
   }, 780);
+}
+
+function updatePreviewImage() {
+  const img = document.getElementById('product-img');
+  if (!img || !state.producto) return;
+  const sabor = state.selectedSabor?.value;
+  const mapa = state.producto.saboresImagenes;
+  img.src = (sabor && mapa && mapa[sabor]) ? mapa[sabor] : state.producto.image;
 }
 
 function updateAccordionPreviews() {
@@ -399,6 +429,7 @@ function renderSabores() {
     chip.classList.add('selected');
     chip.setAttribute('aria-pressed', 'true');
     state.selectedSabor = SABORES_OPCIONES.find((o) => o.value === chip.dataset.value) || null;
+    updatePreviewImage();
     updatePersonalizacionResumen(state.producto);
     scheduleCloseDetails(detailsByAcc('sabor'));
   };
@@ -602,6 +633,8 @@ function initAccordionAnimations() {
 
     det.querySelector('summary').addEventListener('click', (e) => {
       e.preventDefault();
+      // Si la animación quedó colgada (body sin height inline = estado estable), limpiar
+      if (det.dataset.animating && !body.style.height) delete det.dataset.animating;
       if (det.dataset.animating) return;
 
       if (det.open) {

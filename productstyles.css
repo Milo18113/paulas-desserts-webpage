@@ -93,6 +93,9 @@ body.product-page .dropbtn {
   display: flex;
   flex-direction: column;
   gap: 0;
+  position: sticky;
+  top: 90px;
+  align-self: start;
 }
 
 .product-main-img {
@@ -1088,6 +1091,10 @@ details[open] > summary .form-accordion-chevron {
 }
 
 @media (max-width: 820px) {
+  .product-images {
+    position: static;
+  }
+
   .product-hero {
     grid-template-columns: 1fr;
     padding: 20px 20px 40px;
