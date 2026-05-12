@@ -194,11 +194,32 @@ function setAccordionPreviewText(id, text) {
   if (el) el.textContent = text;
 }
 
+function animateCloseDetails(det) {
+  if (!det || !det.open || det.dataset.animating) return;
+  const body = det.querySelector('.form-accordion-body');
+  if (!body) { det.open = false; return; }
+  det.dataset.animating = '1';
+  const startH = body.scrollHeight;
+  body.style.height = startH + 'px';
+  body.style.paddingBottom = '0';
+  requestAnimationFrame(() => {
+    body.style.transition = 'height 0.32s ease';
+    body.style.height = '0';
+  });
+  body.addEventListener('transitionend', () => {
+    det.removeAttribute('open');
+    body.style.height = '';
+    body.style.transition = '';
+    body.style.paddingBottom = '';
+    delete det.dataset.animating;
+  }, { once: true });
+}
+
 function scheduleCloseDetails(det) {
   if (!det || typeof det.matches !== 'function' || !det.matches('details.form-accordion')) return;
   clearTimeout(det._accCloseT);
   det._accCloseT = setTimeout(() => {
-    det.open = false;
+    animateCloseDetails(det);
   }, 420);
 }
 
@@ -582,25 +603,11 @@ function initAccordionAnimations() {
     det.querySelector('summary').addEventListener('click', (e) => {
       e.preventDefault();
       if (det.dataset.animating) return;
-      det.dataset.animating = '1';
 
       if (det.open) {
-        // Cerrar: fijar height incluyendo padding, luego quitar padding y animar a 0
-        const startH = body.scrollHeight;
-        body.style.height = startH + 'px';
-        body.style.paddingBottom = '0';
-        requestAnimationFrame(() => {
-          body.style.transition = 'height 0.32s ease';
-          body.style.height = '0';
-        });
-        body.addEventListener('transitionend', () => {
-          det.removeAttribute('open');
-          body.style.height = '';
-          body.style.transition = '';
-          body.style.paddingBottom = '';
-          delete det.dataset.animating;
-        }, { once: true });
+        animateCloseDetails(det);
       } else {
+        det.dataset.animating = '1';
         // Abrir: sin padding todavía, medir, animar, restaurar padding al final
         body.style.paddingBottom = '0';
         det.setAttribute('open', '');
