@@ -85,6 +85,18 @@
     "relacionados": ["cookie-box-pequena", "cookie-box-grande", "brownie"]
   },
   {
+    "id": "galletas de azucar",
+    "nombre": "Galletas de Azúcar Decoradas",
+    "categoria": "Galletas",
+    "descripcion": "Suaves galletas de mantequillas con diseños personalizables",
+    "image": null,
+    "alergenos": ["Gluten", "Lácteos"],
+    "tallas": [
+      { "label": "Único", "desc": "12 galletas", "precio": 12 }
+    ],
+    "relacionados": ["cookie-box-pequena", "baileys-cookies", "brownie"]
+  },
+  {
     "id": "cookie-box-pequena",
     "nombre": "Cookie Box Pequeña",
     "categoria": "Galletas",
