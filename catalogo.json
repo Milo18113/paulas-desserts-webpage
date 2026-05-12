@@ -101,7 +101,7 @@
     "nombre": "Cookie Box Pequeña",
     "categoria": "Galletas",
     "descripcion": "Mix de galletas: s'mores, double chocolate, oreo, chocochip y funfetti.",
-    "image": "Paula's_Desserts/smallbox.jpg",
+    "image": "assets/productos/smallbox.jpg",
     "alergenos": ["Gluten", "Lácteos", "Nueces"],
     "tallas": [
       { "label": "Único", "desc": "8 galletas", "precio": 8.50 }
@@ -113,7 +113,7 @@
     "nombre": "Cookie Box Grande",
     "categoria": "Galletas",
     "descripcion": "Mix de galletas: s'mores, double chocolate, oreo, chocochip y funfetti.",
-    "image": null,
+    "image": "assets/productos/bigbox.png",
     "alergenos": ["Gluten", "Lácteos", "Nueces"],
     "tallas": [
       { "label": "Único", "desc": "16 galletas", "precio": 17 }
