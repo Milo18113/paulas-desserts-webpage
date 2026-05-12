@@ -143,6 +143,7 @@ function poblarPagina(producto) {
   }
 
   updatePersonalizacionResumen(producto);
+  initAccordionAnimations();
 }
 
 function escapeHtml(s) {
@@ -569,6 +570,55 @@ function updatePersonalizacionResumen(producto) {
   if (wa) {
     wa.href = `https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(buildMensajePedido(producto))}`;
   }
+}
+
+// ===== ANIMACIONES DE ACORDEONES =====
+
+function initAccordionAnimations() {
+  document.querySelectorAll('.form-accordion').forEach((det) => {
+    const body = det.querySelector('.form-accordion-body');
+    if (!body) return;
+
+    det.querySelector('summary').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (det.dataset.animating) return;
+      det.dataset.animating = '1';
+
+      if (det.open) {
+        // Cerrar: fijar height incluyendo padding, luego quitar padding y animar a 0
+        const startH = body.scrollHeight;
+        body.style.height = startH + 'px';
+        body.style.paddingBottom = '0';
+        requestAnimationFrame(() => {
+          body.style.transition = 'height 0.32s ease';
+          body.style.height = '0';
+        });
+        body.addEventListener('transitionend', () => {
+          det.removeAttribute('open');
+          body.style.height = '';
+          body.style.transition = '';
+          body.style.paddingBottom = '';
+          delete det.dataset.animating;
+        }, { once: true });
+      } else {
+        // Abrir: sin padding todavía, medir, animar, restaurar padding al final
+        body.style.paddingBottom = '0';
+        det.setAttribute('open', '');
+        const endH = body.scrollHeight;
+        body.style.height = '0';
+        requestAnimationFrame(() => {
+          body.style.transition = 'height 0.32s ease';
+          body.style.height = endH + 26 + 'px';
+        });
+        body.addEventListener('transitionend', () => {
+          body.style.height = '';
+          body.style.transition = '';
+          body.style.paddingBottom = '';
+          delete det.dataset.animating;
+        }, { once: true });
+      }
+    });
+  });
 }
 
 async function guardarPersonalizacion(producto) {

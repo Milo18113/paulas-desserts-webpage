@@ -431,6 +431,23 @@ body.product-page .dropbtn {
   border-radius: 2px;
 }
 
+.form-accordion-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.form-accordion-chevron {
+  color: var(--color-text);
+  flex-shrink: 0;
+  transform: rotate(-90deg);
+  transition: transform 0.22s ease;
+}
+
+details[open] > summary .form-accordion-chevron {
+  transform: rotate(0deg);
+}
+
 .form-accordion-title {
   font-size: 11px;
   font-weight: 700;
@@ -458,6 +475,7 @@ body.product-page .dropbtn {
 }
 
 .form-accordion-body {
+  overflow: hidden;
   padding: 0 0 26px;
 }
 
