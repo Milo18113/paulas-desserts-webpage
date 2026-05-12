@@ -451,6 +451,21 @@ main {
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+a.card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+a.card-link:nth-child(odd)  .card { transform: rotate(-0.6deg); }
+a.card-link:nth-child(even) .card { transform: rotate(0.5deg); }
+a.card-link:hover .card {
+  transform: rotate(0deg) translateY(-6px) scale(1.01) !important;
+  box-shadow:
+    0 16px 40px rgba(28, 59, 128, 0.18),
+    0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .card img {
@@ -627,6 +642,17 @@ main {
   text-decoration: none;
   color: inherit;
   border-radius: 8px;
+  transition: transform 0.22s ease, opacity 0.22s ease;
+}
+
+.promo-icon-link:hover {
+  transform: translateY(-4px) scale(1.12);
+  opacity: 0.75;
+}
+
+.promo-icon-link:active {
+  transform: translateY(-1px) scale(1.06);
+  opacity: 0.6;
 }
 
 .promo-icon-link:focus-visible {
