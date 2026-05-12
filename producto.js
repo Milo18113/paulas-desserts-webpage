@@ -381,18 +381,31 @@ function renderRelacionados(ids, catalogo) {
     if (!p) return;
 
     const desc = (p.descripcion || '').split('.')[0] || p.categoria;
+    const precio = p.tallas?.[0]?.precio;
+    const precioTxt = precio !== null && precio !== undefined
+      ? `desde $${Number(precio).toFixed(2)}`
+      : 'A consultar';
     const imgHtml = p.image
-      ? `<img class="polaroid-img" src="${escapeHtml(p.image)}" alt="${escapeHtml(p.nombre)}" loading="lazy" />`
-      : `<div class="polaroid-img polaroid-img--empty" role="img" aria-label="Sin foto">Sin foto</div>`;
+      ? `<img class="polaroid-photo" src="${escapeHtml(p.image)}" alt="${escapeHtml(p.nombre)}" loading="lazy" />`
+      : `<div class="polaroid-photo-placeholder">🍰</div>`;
+    const tagsHtml = p.alergenos?.length
+      ? p.alergenos.map((a) => `<span class="tag">${escapeHtml(a)}</span>`).join('')
+      : '';
 
     grid.insertAdjacentHTML(
       'beforeend',
-      `<a href="producto.html?id=${encodeURIComponent(p.id)}" class="polaroid">
-        ${imgHtml}
-        <div class="polaroid-label">
-          <div class="product-name">${escapeHtml(p.nombre)}</div>
-          <div class="product-desc">${escapeHtml(p.categoria)} · ${escapeHtml(desc)}</div>
-        </div>
+      `<a href="producto.html?id=${encodeURIComponent(p.id)}" class="polaroid" style="text-decoration:none;color:inherit;">
+        <article>
+          ${imgHtml}
+          <div class="polaroid-body">
+            <h3>${escapeHtml(p.nombre)}</h3>
+            ${tagsHtml ? `<div class="polaroid-tags">${tagsHtml}</div>` : ''}
+            <p class="polaroid-desc">${escapeHtml(desc)}</p>
+            <div class="polaroid-footer">
+              <span class="price">${precioTxt}</span>
+            </div>
+          </div>
+        </article>
       </a>`
     );
   });
