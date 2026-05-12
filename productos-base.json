@@ -4,7 +4,7 @@
     "nombre": "Pastel personalizado",
     "categoria": "Personalización",
     "descripcion": "Diseña tu pastel desde cero: sabor, relleno, tamaño, tema y decoración a tu gusto.",
-    "image": "Paula's_Desserts/ChocolateLoversCake.png",
+    "image": "uploads/cakepersonalizar.jpg",
     "alergenos": ["Gluten", "Lácteos"],
     "tallas": [
       { "label": "Pequeño", "desc": "6–8 porciones", "precio": null },
@@ -17,7 +17,7 @@
     "nombre": "Cupcakes personalizados",
     "categoria": "Personalización",
     "descripcion": "Caja de cupcakes a tu medida: elige sabor, cobertura y decoración.",
-    "image": "Paula's_Desserts/CajaCupcakes.png",
+    "image": "uploads/cupcakepersonalizar.jpg",
     "alergenos": ["Gluten", "Lácteos"],
     "tallas": [
       { "label": "Caja x6", "desc": "6 cupcakes", "precio": null },
@@ -30,7 +30,7 @@
     "nombre": "Galletas personalizadas",
     "categoria": "Personalización",
     "descripcion": "Galletas decoradas con tu tema, colores y mensaje.",
-    "image": "Paula's_Desserts/GalletasAzucar.png",
+    "image": "uploads/galletaspersonalizar.jpg",
     "alergenos": ["Gluten", "Lácteos", "Puede contener nueces", "Puede contener alcohol"],
     "tallas": [
       { "label": "Bolsa x6", "desc": "6 galletas", "precio": null },
@@ -43,7 +43,7 @@
     "nombre": "Pie personalizado",
     "categoria": "Personalización",
     "descripcion": "Pie hecho a tu gusto: elige sabor, relleno y detalles.",
-    "image": "Paula's_Desserts/PieDeLimon.png",
+    "image": "assets/productos/pie-de-limon.jpg",
     "alergenos": ["Puede contener gluten", "Puede contener lácteos"],
     "tallas": [
       { "label": "Pequeño", "desc": "6–8 porciones", "precio": null },
