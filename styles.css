@@ -1159,4 +1159,33 @@ main {
   .cards-corner-br {
     transform: translate(12%, 12%);
   }
+
+/* The image wrapper / square container */
+.card-image {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* keeps it square */
+  overflow: hidden;     /* clips anything outside */
+}
+
+/* The actual <img> tag inside it */
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* fills the box, crops edges, no distortion */
+  object-position: center; /* crops from the center */
+  display: block;
+}
+.polaroid-photo-placeholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.polaroid-photo-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
 }
