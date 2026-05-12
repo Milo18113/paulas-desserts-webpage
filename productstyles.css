@@ -413,7 +413,7 @@ body.product-page .dropbtn {
   align-items: baseline;
   justify-content: space-between;
   gap: 8px 16px;
-  padding: 14px 0 12px;
+  padding: 0 0 12px;
   font-family: var(--font-body);
 }
 
@@ -445,7 +445,7 @@ body.product-page .dropbtn {
   font-weight: 600;
   letter-spacing: 0.02em;
   text-transform: none;
-  color: var(--color-text);
+  color: var(--color-secondary);
   opacity: 0.78;
   max-width: min(100%, 260px);
   text-align: right;
@@ -458,7 +458,7 @@ body.product-page .dropbtn {
 }
 
 .form-accordion-body {
-  padding: 0 0 16px;
+  padding: 0 0 26px;
 }
 
 .form-accordion:not([open]) .form-accordion-summary {

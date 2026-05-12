@@ -6,7 +6,7 @@
 const WHATSAPP_NUM = '593980191040';
 
 const SABORES_OPCIONES = [
-  { label: 'Clásico (según producto)', value: 'clasico' },
+  { label: 'Clásico', value: 'clasico' },
   { label: 'Chocolate', value: 'chocolate' },
   { label: 'Vainilla', value: 'vainilla' },
   { label: 'Red velvet', value: 'red-velvet' },

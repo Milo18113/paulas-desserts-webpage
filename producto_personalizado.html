@@ -64,19 +64,15 @@
       <div class="tab-block">
         <h3 class="contains-title">Contiene (alérgenos e información)</h3>
         <ul class="lorem-list" id="product-alergenos"></ul>
+        <br>
+        <p class="product-tagline">Los ingredientes se pueden modificar a continuación.</p>
       </div>
 
       <hr class="divider" />
 
       <section id="product-personalizacion" class="product-custom-panel" aria-labelledby="personalizacion-titulo">
         <h2 id="personalizacion-titulo" class="custom-title custom-title--upper">PERSONALIZA TU PEDIDO</h2>
-        <p class="custom-hint custom-hint--compact">
-          Completa lo que ya tengas claro; cada bloque se <strong>cierra solo</strong> al contestar para acortar la página. Volvé a abrirlo con un clic en el título. Al final <strong>copia el texto</strong> o úsalo en <strong>WhatsApp</strong>.
-        </p>
-
         <div class="form-strip">
-          <p class="form-block-title">Tipo de producto</p>
-          <p id="product-tipo-line" class="form-readonly" aria-live="polite"></p>
           <div class="form-strip-qty">
             <label for="product-cantidad" class="form-strip-qty-label">Unidades</label>
             <input
@@ -101,7 +97,6 @@
             <span class="form-accordion-preview" id="acc-preview-talla"></span>
           </summary>
           <div class="form-accordion-body">
-            <p class="custom-microhint">Guía de porciones ≈ personas. El precio depende del tamaño elegido.</p>
             <div class="size-options" id="product-tallas" role="radiogroup" aria-label="Tamaño o porciones"></div>
           </div>
         </details>
@@ -112,7 +107,6 @@
             <span class="form-accordion-preview" id="acc-preview-sabor"></span>
           </summary>
           <div class="form-accordion-body">
-            <p class="custom-microhint custom-microhint--tight">Opciones generales; si no aplica, elige «Otro» y detalla abajo.</p>
             <div id="product-sabores" class="option-chips" role="radiogroup" aria-label="Sabor"></div>
           </div>
         </details>
@@ -167,7 +161,6 @@
             <span class="form-accordion-preview" id="acc-preview-diet"></span>
           </summary>
           <div class="form-accordion-body">
-            <p class="custom-microhint custom-microhint--tight">Podés marcar varias. Se aplican a este pedido.</p>
             <div id="diet-chips" class="option-chips option-chips--multi" role="group" aria-label="Preferencias dietéticas"></div>
           </div>
         </details>
